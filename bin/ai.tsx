@@ -301,6 +301,12 @@ async function executeWithPipeline(
     enableDryRun: false,
   })
 
+  // 根据 experimental.guardrails 开关启用安全护栏
+  if (isExperimentalEnabled('guardrails')) {
+    const { guardrailsPreHook } = await import('../src/security/guardrails-hook.js')
+    pipeline.usePre(guardrailsPreHook)
+  }
+
   const ctx = {
     command,
     cwd: options.cwd || process.cwd(),

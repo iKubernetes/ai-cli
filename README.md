@@ -343,6 +343,25 @@ ai config set <key> <value>  # 修改单项
 
 支持的 Provider：openai、deepseek、anthropic、google、groq、mistral、cohere、fireworks、together
 
+### 启用Feature Gate
+
+1. 启用两个必需的 flag
+```bash
+ai config set experimental.guardrails true
+ai config set experimental.executionPipeline true
+```
+
+2. 验证配置
+```bash
+cat ~/.ai-cli/config.json | grep experimental
+```
+
+3. 测试安全防护
+```
+ai "rm -rf /"    # 应弹出 SECURITY ALERT [CRITICAL]，要求输入 "yes"
+ai "ls -la"      # 安全命令直接执行
+```
+
 ### 升级
 
 ```bash
