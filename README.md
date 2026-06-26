@@ -6,10 +6,6 @@
 
 > `ai 查看当前目录` — 让 AI 帮你干活，专注学习 Linux 和编程
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/aeebcac4-ee52-4b9d-b2c9-77c2930e7454" alt="AI-CLI Demo" width="800">
-</p>
-
 ## 这是啥？
 
 忘了 Shell 命令怎么写？没关系，用人话告诉 `ai` 你想干嘛就行。
