@@ -7,3 +7,7 @@ build/
 .local/
 bun.lock
 coverage/
+*.tmp
+.cache/
+*.tsbuildinfo
+package-lock.json
