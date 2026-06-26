@@ -12,7 +12,8 @@ import chalk from 'chalk'
 // import { render } from 'ink'
 // import { MultiStepCommandGenerator } from '../src/components/MultiStepCommandGenerator.js'
 // import { Chat } from '../src/components/Chat.js'
-import { isConfigValid, setConfigValue, getConfig, maskApiKey, displayConfig, isExperimentalEnabled, setExperimental } from '../src/config.js'
+import { isConfigValid, getConfig, maskApiKey, displayConfig, isExperimentalEnabled, setConfigValue } from '../src/config.js'
+import { configCommand } from '../src/commands/config.js'
 import { clearHistory, addHistory, getHistory, getHistoryFilePath } from '../src/history.js'
 import { clearChatHistory, getChatRoundCount, getChatHistoryFilePath, displayChatHistory } from '../src/chat-history.js'
 import { type ExecutedStep } from '../src/multi-step.js'
@@ -438,94 +439,7 @@ program
   .allowUnknownOption(true)  // 允许未知选项（用于别名参数传递）
 
 // config 子命令
-const configCmd = program.command('config').description('管理配置')
-
-configCmd
-  .command('list')
-  .alias('show')
-  .description('查看当前配置')
-  .action(() => {
-    displayConfig()
-  })
-
-configCmd
-  .command('set <key> <value>')
-  .description('设置配置项 (apiKey, baseUrl, provider, model, shellHook, chatHistoryLimit, experimental.<key>)')
-  .action(async (key, value) => {
-    try {
-      // 处理 experimental.<key> 格式
-      if (key.startsWith('experimental.')) {
-        const flagKey = key.slice('experimental.'.length)
-        const boolValue = value === 'true' || value === '1'
-        await setExperimental(flagKey, boolValue)
-        console.log('')
-        console2.success(`已设置 experimental.${flagKey} = ${boolValue}`)
-        console.log('')
-        return
-      }
-
-      const oldConfig = getConfig()
-      const oldShellHistoryLimit = oldConfig.shellHistoryLimit
-
-      setConfigValue(key, value)
-      console.log('')
-      console2.success(`已设置 ${key}`)
-
-      // 如果修改了 shellHistoryLimit，自动重装 hook
-      if (key === 'shellHistoryLimit') {
-        const { reinstallHookForLimitChange } = await import('../src/shell-hook.js')
-        await reinstallHookForLimitChange(oldShellHistoryLimit, Number(value))
-      }
-
-      console.log('')
-    } catch (error: any) {
-      console.log('')
-      console2.error(error.message)
-      console.log('')
-      process.exit(1)
-    }
-  })
-
-configCmd
-  .command('get <key>')
-  .description('获取配置项 (支持 experimental.<key>)')
-  .action((key) => {
-    try {
-      // 处理 experimental.<key> 格式
-      if (key.startsWith('experimental.')) {
-        const flagKey = key.slice('experimental.'.length)
-        const enabled = isExperimentalEnabled(flagKey)
-        console.log('')
-        console.log(`  ${key}: ${enabled}`)
-        console.log('')
-        return
-      }
-
-      // 普通配置项
-      const config = getConfig()
-      if (key in config) {
-        console.log('')
-        console.log(`  ${key}: ${(config as any)[key]}`)
-        console.log('')
-      } else {
-        console.log('')
-        console2.error(`未知的配置项: ${key}`)
-        console.log('')
-        process.exit(1)
-      }
-    } catch (error: any) {
-      console.log('')
-      console2.error(error.message)
-      console.log('')
-      process.exit(1)
-    }
-  })
-
-// 默认 config 命令（交互式配置）
-configCmd.action(async () => {
-  const { runConfigWizard } = await import('../src/config.js')
-  await runConfigWizard()
-})
+program.addCommand(configCommand())
 
 // theme 子命令
 const themeCmd = program.command('theme').description('管理主题')

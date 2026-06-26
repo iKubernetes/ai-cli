@@ -173,10 +173,51 @@ export function saveConfig(config: Config): void {
 }
 
 /**
- * 设置单个配置项
+ * 解析点号分隔的嵌套键，从对象中取值
+ */
+function getNestedValue(obj: Record<string, any>, key: string): any {
+  return key.split('.').reduce((current, k) => {
+    if (current === null || current === undefined) return undefined
+    return current[k]
+  }, obj)
+}
+
+/**
+ * 通过点号分隔的嵌套键设置对象中的值
+ */
+function setNestedValue(obj: Record<string, any>, key: string, value: any): void {
+  const parts = key.split('.')
+  let current = obj
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i]
+    if (!current[part] || typeof current[part] !== 'object') {
+      current[part] = {}
+    }
+    current = current[part]
+  }
+  current[parts[parts.length - 1]] = value
+}
+
+/**
+ * 检查键是否为嵌套键（包含点号）
+ */
+function isNestedKey(key: string): boolean {
+  return key.includes('.')
+}
+
+/**
+ * 设置单个配置项（支持点号分隔的嵌套键）
  */
 export function setConfigValue(key: string, value: string | boolean | number): Config {
   const config = getConfig()
+
+  // 处理嵌套键（如 experimental.guardrails）
+  if (isNestedKey(key)) {
+    setNestedValue(config, key, value)
+    saveConfig(config)
+    cachedConfig = null
+    return config
+  }
 
   if (!(key in DEFAULT_CONFIG)) {
     throw new Error(`未知的配置项: ${key}`)
@@ -221,6 +262,21 @@ export function setConfigValue(key: string, value: string | boolean | number): C
   cachedConfig = null
 
   return config
+}
+
+/**
+ * 获取单个配置项（支持点号分隔的嵌套键）
+ * 若键不存在返回 undefined
+ */
+export function getConfigValue(key: string): any {
+  const config = getConfig()
+  if (isNestedKey(key)) {
+    return getNestedValue(config, key)
+  }
+  if (key in config) {
+    return (config as any)[key]
+  }
+  return undefined
 }
 
 /**
