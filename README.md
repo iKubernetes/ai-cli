@@ -1,38 +1,38 @@
-# 马哥教育AI学习助手 (pls)
+# 马哥教育AI学习助手 (ai)
 
 <p align="center">
   <strong>"马哥教育AI学习助手" — 专为马哥教育学员打造的 AI 命令行学习工具</strong>
 </p>
 
-> `please 查看当前目录` — 让 AI 帮你干活，专注学习 Linux 和编程
+> `ai 查看当前目录` — 让 AI 帮你干活，专注学习 Linux 和编程
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/aeebcac4-ee52-4b9d-b2c9-77c2930e7454" alt="Pretty Please Demo" width="800">
+  <img src="https://github.com/user-attachments/assets/aeebcac4-ee52-4b9d-b2c9-77c2930e7454" alt="AI-CLI Demo" width="800">
 </p>
 
 ## 这是啥？
 
-忘了 Shell 命令怎么写？没关系，用人话告诉 `pls` 你想干嘛就行。
+忘了 Shell 命令怎么写？没关系，用人话告诉 `ai` 你想干嘛就行。
 
-**pretty please** 是英语里"拜托了"的意思，而我们的命令就叫 `pls` / `please`，所以每次执行命令都像是在礼貌地请求：
+我们的命令就叫 `ai`，每次执行都像是在呼唤 AI 助手：
 
 ```bash
-please 帮我压缩这个文件夹
-pls 找出占用 8080 端口的进程
-pls 在服务器上重启 nginx
+ai 帮我压缩这个文件夹
+ai 找出占用 8080 端口的进程
+ai 在服务器上重启 nginx
 ```
 
 AI 生成命令 → 你确认 → 执行 → 搞定。
 
-## ✨ 命令打错了？直接 `pls` 就行
+## ✨ 命令打错了？直接 `ai` 就行
 
-像 [thefuck](https://github.com/nvbn/thefuck) 一样，命令执行失败后，直接输入 `pls` 让 AI 自动修复：
+像 [thefuck](https://github.com/nvbn/thefuck) 一样，命令执行失败后，直接输入 `ai` 让 AI 自动修复：
 
 ```bash
 ❯ python --version
 zsh: command not found: python
 
-❯ pls  # ← 就这么简单！
+❯ ai  # ← 就这么简单！
 ✓ 生成命令: python3 --version
 Python 3.9.6
 ```
@@ -41,17 +41,17 @@ Python 3.9.6
 ❯ git pus origin main
 git: 'pus' is not a git command. See 'git --help'.
 
-❯ pls
+❯ ai
 ✓ 生成命令: git push origin main
 Enumerating objects: 5, done.
 ...
 ```
 
-不用说"修复上一条命令"，不用重新输入，**直接 `pls`，AI 自动检测失败的命令并生成正确版本**。
+不用说"修复上一条命令"，不用重新输入，**直接 `ai`，AI 自动检测失败的命令并生成正确版本**。
 
 ## 为什么用这个？
 
-- **命令打错了？** 直接 `pls` 自动修复，像 thefuck 一样方便，但更智能
+- **命令打错了？** 直接 `ai` 自动修复，像 thefuck 一样方便，但更智能
 - 记不住 `tar` 的一堆参数
 - 想批量处理文件但懒得写脚本
 - 想问问某个命令怎么用
@@ -59,7 +59,7 @@ Enumerating objects: 5, done.
 ## 能干啥？
 
 **核心特性：**
-- **自动修复错误** - 命令失败后直接 `pls`，AI 自动检测并生成正确命令（像 thefuck，但更智能）
+- **自动修复错误** - 命令失败后直接 `ai`，AI 自动检测并生成正确命令（像 thefuck，但更智能）
 - **自然语言转命令** - 生成前让你确认或编辑
 - **智能多步任务** - 复杂任务自动拆分，每步基于上一步的结果
 - **错误恢复重试** - 命令失败了 AI 会分析原因并调整策略
@@ -67,35 +67,23 @@ Enumerating objects: 5, done.
 **高级功能：**
 - **学习你的习惯** - 开启 Shell Hook 后，AI 会记住你常用的命令，下次优先用你习惯的工具
 - **远程执行** - 通过 SSH 在服务器上跑命令，支持批量（`-r server1,server2,server3`）
-- **对话模式** - `pls chat grep 怎么用`，随时问问题
+- **对话模式** - `ai chat grep 怎么用`，随时问问题
 - **命令别名** - 把常用操作存成快捷方式
 - **主题系统** - 7 个内置主题 + 自定义主题
-- **自动升级** - `pls upgrade` 一键更新
+- **自动升级** - `ai upgrade` 一键更新
 
 ## 安装
 
-注意：目前 pls 在 windows 端可能会有不兼容导致的 bug，如果遇到可以发 issue 反馈，谢谢
+注意：目前 ai-cli 在 windows 端可能会有不兼容导致的 bug，如果遇到可以发 issue 反馈，谢谢
 
-**方式一：npm（推荐）**
-
-```bash
-npm i -g @yivan-lab/pretty-please
-```
-
-**方式二：一键脚本（无需 Node.js，但是是 bun 打包的，体积比较大）**
+**安装方式：一键脚本（无需 Node.js，但是是 bun 打包的，体积比较大）**
 
 ```bash
 # Linux / macOS
-curl -fsSL https://raw.githubusercontent.com/IvanLark/pretty-please/main/install.sh | bash
-
-# Linux / macOS（国内加速）
-curl -fsSL https://dl.pretty-please.site/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ikubernetes/ai-cli/main/install.sh | bash
 
 # Windows PowerShell
-irm https://raw.githubusercontent.com/IvanLark/pretty-please/main/install.ps1 | iex
-
-# Windows PowerShell（国内加速）
-irm https://dl.pretty-please.site/install.ps1 | iex
+irm https://raw.githubusercontent.com/ikubernetes/ai-cli/main/install.ps1 | iex
 ```
 
 支持平台：Linux (x64/arm64) / macOS (Intel/Apple Silicon) / Windows (x64)
@@ -105,7 +93,7 @@ irm https://dl.pretty-please.site/install.ps1 | iex
 **第一步：配置 API**
 
 ```bash
-pls config
+ai config
 ```
 
 按提示输入你的 AI API 信息（支持 OpenAI、DeepSeek、Claude 等）
@@ -113,9 +101,9 @@ pls config
 **第二步：开始用**
 
 ```bash
-pls 查看当前目录
-pls 找出大于100MB的文件
-pls chat grep 怎么用
+ai 查看当前目录
+ai 找出大于100MB的文件
+ai chat grep 怎么用
 ```
 
 ## 使用示例
@@ -125,10 +113,10 @@ pls chat grep 怎么用
 最简单的方式，直接说你想干啥：
 
 ```bash
-pls 查看当前目录
-pls 安装 git
-pls 找出占用 8080 端口的进程
-pls 删除所有 .DS_Store 文件
+ai 查看当前目录
+ai 安装 git
+ai 找出占用 8080 端口的进程
+ai 删除所有 .DS_Store 文件
 ```
 
 AI 生成命令，你确认后执行。
@@ -138,7 +126,7 @@ AI 生成命令，你确认后执行。
 复杂的任务 AI 会自动拆分，每步基于上一步的结果：
 
 ```bash
-pls 找出大于100MB的日志文件并压缩
+ai 找出大于100MB的日志文件并压缩
 ```
 
 **执行流程：**
@@ -151,13 +139,13 @@ pls 找出大于100MB的日志文件并压缩
 AI 记得你之前干了啥：
 
 ```bash
-pls 创建一个 test.txt
-pls 删除刚才的文件  # AI 知道你说的是 test.txt
+ai 创建一个 test.txt
+ai 删除刚才的文件  # AI 知道你说的是 test.txt
 
 # 或者
 mkdir my-project
 cd my-project
-pls 在这个目录初始化 git 仓库  # AI 知道当前上下文
+ai 在这个目录初始化 git 仓库  # AI 知道当前上下文
 ```
 
 ### 错误恢复
@@ -165,7 +153,7 @@ pls 在这个目录初始化 git 仓库  # AI 知道当前上下文
 命令失败了 AI 会分析并重试：
 
 ```bash
-pls 把 test.zip 移动到 a、b、c 三个文件夹
+ai 把 test.zip 移动到 a、b、c 三个文件夹
 ```
 
 **执行过程：**
@@ -193,7 +181,7 @@ pls 把 test.zip 移动到 a、b、c 三个文件夹
 或者用 `auto` 模式，自动进入编辑：
 
 ```bash
-pls config set editMode auto
+ai config set editMode auto
 ```
 
 ### 对话模式
@@ -201,9 +189,9 @@ pls config set editMode auto
 想问问命令怎么用：
 
 ```bash
-pls chat tar 命令怎么用
-pls chat grep 和 awk 有什么区别
-pls chat 刚才那个命令是干嘛的？  # 会解释你最近执行的命令
+ai chat tar 命令怎么用
+ai chat grep 和 awk 有什么区别
+ai chat 刚才那个命令是干嘛的？  # 会解释你最近执行的命令
 ```
 
 ### 远程执行
@@ -212,14 +200,14 @@ pls chat 刚才那个命令是干嘛的？  # 会解释你最近执行的命令
 
 ```bash
 # 添加服务器
-pls remote add myserver root@192.168.1.100
+ai remote add myserver root@192.168.1.100
 
 # 远程执行
-pls -r myserver 查看磁盘使用情况
-pls -r myserver 重启 nginx
+ai -r myserver 查看磁盘使用情况
+ai -r myserver 重启 nginx
 
 # 批量执行（在多台服务器上同时跑）
-pls -r web1,web2,web3 查看 nginx 状态
+ai -r web1,web2,web3 查看 nginx 状态
 ```
 
 ### 命令别名
@@ -228,14 +216,14 @@ pls -r web1,web2,web3 查看 nginx 状态
 
 ```bash
 # 添加别名
-pls alias add disk "查看磁盘使用情况，按使用率排序"
+ai alias add disk "查看磁盘使用情况，按使用率排序"
 
 # 使用
-pls disk
+ai disk
 
 # 带参数的别名
-pls alias add taillog "查看 {{file}} 的最后 {{lines:20}} 行"
-pls taillog --file=/var/log/system.log --lines=50
+ai alias add taillog "查看 {{file}} 的最后 {{lines:20}} 行"
+ai taillog --file=/var/log/system.log --lines=50
 ```
 
 ## 更多功能
@@ -243,12 +231,12 @@ pls taillog --file=/var/log/system.log --lines=50
 ### 历史记录
 
 ```bash
-pls history              # 命令历史
-pls history chat         # 对话历史
-pls history shell        # Shell 历史（需要启用 Shell Hook）
+ai history              # 命令历史
+ai history chat         # 对话历史
+ai history shell        # Shell 历史（需要启用 Shell Hook）
 
-pls history clear        # 清空命令历史
-pls history chat clear   # 清空对话历史
+ai history clear        # 清空命令历史
+ai history chat clear   # 清空对话历史
 ```
 
 ### Shell Hook
@@ -256,18 +244,18 @@ pls history chat clear   # 清空对话历史
 记录你在终端执行的所有命令，让 AI 更了解上下文：
 
 ```bash
-pls hook install    # 安装 hook
-pls hook status     # 查看状态
-pls hook uninstall  # 卸载 hook
+ai hook install    # 安装 hook
+ai hook status     # 查看状态
+ai hook uninstall  # 卸载 hook
 ```
 
 支持 zsh / bash / PowerShell。
 
-**开了 Hook 后，pls 会学习你的命令习惯。** 比如你平时用 `eza` 而不是 `ls`，用 `bat` 而不是 `cat`，AI 生成命令时会优先用你习惯的工具。用得越多，AI 越懂你。
+**开了 Hook 后，ai 会学习你的命令习惯。** 比如你平时用 `eza` 而不是 `ls`，用 `bat` 而不是 `cat`，AI 生成命令时会优先用你习惯的工具。用得越多，AI 越懂你。
 
 ```bash
-pls prefs           # 看看 AI 学到了什么
-pls prefs clear     # 清空偏好统计
+ai prefs           # 看看 AI 学到了什么
+ai prefs clear     # 清空偏好统计
 ```
 
 ### 系统信息
@@ -275,8 +263,8 @@ pls prefs clear     # 清空偏好统计
 查看当前系统信息（AI 生成命令时会参考这些）：
 
 ```bash
-pls sysinfo         # 查看系统信息
-pls sysinfo refresh # 刷新缓存
+ai sysinfo         # 查看系统信息
+ai sysinfo refresh # 刷新缓存
 ```
 
 ### 主题
@@ -284,9 +272,9 @@ pls sysinfo refresh # 刷新缓存
 7 个内置主题 + 自定义主题：
 
 ```bash
-pls theme              # 查看当前主题
-pls theme list         # 查看所有主题
-pls theme nord         # 切换主题
+ai theme              # 查看当前主题
+ai theme list         # 查看所有主题
+ai theme nord         # 切换主题
 ```
 
 **内置主题：** dark、light、nord、dracula、retro、contrast、monokai
@@ -294,10 +282,10 @@ pls theme nord         # 切换主题
 **自定义主题：**
 
 ```bash
-pls theme create my-theme --display-name "我的主题"
-vim ~/.please/themes/my-theme.json  # 编辑主题配置
-pls theme validate ~/.please/themes/my-theme.json  # 验证
-pls theme my-theme  # 应用
+ai theme create my-theme --display-name "我的主题"
+vim ~/.ai/themes/my-theme.json  # 编辑主题配置
+ai theme validate ~/.ai/themes/my-theme.json  # 验证
+ai theme my-theme  # 应用
 ```
 
 ### 远程执行详细说明
@@ -305,29 +293,29 @@ pls theme my-theme  # 应用
 **添加服务器：**
 
 ```bash
-pls remote add myserver root@192.168.1.100
-pls remote add myserver root@192.168.1.100 --key ~/.ssh/my_key
-pls remote add myserver root@192.168.1.100 --password  # 密码认证
+ai remote add myserver root@192.168.1.100
+ai remote add myserver root@192.168.1.100 --key ~/.ssh/my_key
+ai remote add myserver root@192.168.1.100 --password  # 密码认证
 ```
 
 **管理服务器：**
 
 ```bash
-pls remote                    # 查看所有服务器
-pls remote test myserver      # 测试连接
-pls remote remove myserver    # 删除
-pls remote default myserver   # 设置默认服务器
-pls remote workdir myserver /var/www  # 设置工作目录
+ai remote                    # 查看所有服务器
+ai remote test myserver      # 测试连接
+ai remote remove myserver    # 删除
+ai remote default myserver   # 设置默认服务器
+ai remote workdir myserver /var/www  # 设置工作目录
 ```
 
 **远程执行：**
 
 ```bash
-pls -r myserver 查看磁盘使用情况
-pls -r 查看当前目录  # 使用默认服务器
+ai -r myserver 查看磁盘使用情况
+ai -r 查看当前目录  # 使用默认服务器
 
 # 批量执行
-pls -r web1,web2,web3 重启 nginx
+ai -r web1,web2,web3 重启 nginx
 ```
 
 批量执行会为每个服务器生成适配其环境的命令，并发执行。
@@ -335,9 +323,9 @@ pls -r web1,web2,web3 重启 nginx
 **远程历史：**
 
 ```bash
-pls remote history show myserver        # 查看
-pls remote history clear myserver       # 清空
-pls remote hook install myserver        # 安装远程 Hook
+ai remote history show myserver        # 查看
+ai remote history clear myserver       # 清空
+ai remote hook install myserver        # 安装远程 Hook
 ```
 
 ### 配置
@@ -345,9 +333,9 @@ pls remote hook install myserver        # 安装远程 Hook
 查看和修改配置：
 
 ```bash
-pls config           # 交互式配置
-pls config list      # 查看配置
-pls config set <key> <value>  # 修改单项
+ai config           # 交互式配置
+ai config list      # 查看配置
+ai config set <key> <value>  # 修改单项
 ```
 
 主要配置项：
@@ -362,7 +350,7 @@ pls config set <key> <value>  # 修改单项
 ### 升级
 
 ```bash
-pls upgrade  # 升级到最新版本
+ai upgrade  # 升级到最新版本
 ```
 
 程序每 24 小时自动检查更新，发现新版本会提示。
@@ -371,52 +359,52 @@ pls upgrade  # 升级到最新版本
 
 ```bash
 # 基础
-pls <需求>                  # 生成并执行命令
-pls -d <需求>               # Debug 模式
-pls -v                      # 查看版本
+ai <需求>                  # 生成并执行命令
+ai -d <需求>               # Debug 模式
+ai -v                      # 查看版本
 
 # 配置
-pls config                  # 交互式配置
-pls config list             # 查看配置
-pls config set <key> <val>  # 修改配置
+ai config                  # 交互式配置
+ai config list             # 查看配置
+ai config set <key> <val>  # 修改配置
 
 # 历史
-pls history                 # 命令历史
-pls history chat            # 对话历史
-pls history shell           # Shell 历史
-pls history clear           # 清空历史
+ai history                 # 命令历史
+ai history chat            # 对话历史
+ai history shell           # Shell 历史
+ai history clear           # 清空历史
 
 # 对话
-pls chat <问题>             # 问问题
-pls history chat clear      # 清空对话
+ai chat <问题>             # 问问题
+ai history chat clear      # 清空对话
 
 # Hook
-pls hook install            # 安装
-pls hook status             # 状态
-pls hook uninstall          # 卸载
+ai hook install            # 安装
+ai hook status             # 状态
+ai hook uninstall          # 卸载
 
 # 偏好 & 系统
-pls prefs                   # 查看命令偏好
-pls sysinfo                 # 查看系统信息
+ai prefs                   # 查看命令偏好
+ai sysinfo                 # 查看系统信息
 
 # 主题
-pls theme                   # 当前主题
-pls theme list              # 所有主题
-pls theme <name>            # 切换
+ai theme                   # 当前主题
+ai theme list              # 所有主题
+ai theme <name>            # 切换
 
 # 别名
-pls alias                   # 查看
-pls alias add <name> "<prompt>"  # 添加
-pls alias remove <name>     # 删除
+ai alias                   # 查看
+ai alias add <name> "<prompt>"  # 添加
+ai alias remove <name>     # 删除
 
 # 远程
-pls remote add <name> <user@host>  # 添加服务器
-pls remote list             # 查看
-pls -r <name> <需求>        # 远程执行
-pls -r <n1,n2,n3> <需求>    # 批量执行
+ai remote add <name> <user@host>  # 添加服务器
+ai remote list             # 查看
+ai -r <name> <需求>        # 远程执行
+ai -r <n1,n2,n3> <需求>    # 批量执行
 
 # 升级
-pls upgrade                 # 升级到最新版本
+ai upgrade                 # 升级到最新版本
 ```
 
 ## 技术栈
@@ -429,8 +417,8 @@ pls upgrade                 # 升级到最新版本
 ## 开发
 
 ```bash
-git clone https://github.com/IvanLark/pretty-please.git
-cd pretty-please
+git clone https://github.com/ikubernetes/ai-cli.git
+cd ai-cli
 pnpm install
 pnpm build
 pnpm link --global
@@ -441,7 +429,7 @@ pnpm link --global
 ```bash
 pnpm add -g tsx
 pnpm link:dev
-pls-dev <命令>  # 代码修改立即生效
+ai-dev <命令>  # 代码修改立即生效
 ```
 
 ## 常见问题
