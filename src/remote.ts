@@ -242,7 +242,7 @@ export function displayRemotes(): void {
   if (names.length === 0) {
     console.log(chalk.gray('  暂无远程服务器'))
     console.log('')
-    console.log(chalk.gray('  使用 pls remote add <name> <user@host> 添加服务器'))
+    console.log(chalk.gray('  使用 ai remote add <name> <user@host> 添加服务器'))
     console.log('')
     return
   }
@@ -279,7 +279,7 @@ export function displayRemotes(): void {
   }
 
   console.log(chalk.gray('━'.repeat(60)))
-  console.log(chalk.gray('使用: pls -r <name> <prompt> 在远程服务器执行'))
+  console.log(chalk.gray('使用: ai -r <name> <prompt> 在远程服务器执行'))
   console.log('')
 }
 

@@ -272,7 +272,7 @@ function executeCommand(command: string): Promise<{ exitCode: number; output: st
 
 // 设置程序
 program
-  .name('pls')
+    .name('ai')
   .description('马哥教育AI学习助手 — 将自然语言转换为可执行的 Shell 命令')
   .version(packageJson.version, '-v, --version', '显示版本号')
   .helpOption('-h, --help', '显示帮助信息')
@@ -385,7 +385,7 @@ themeCmd
       } else if (options.custom) {
         console.log('')
         console2.muted('  还没有自定义主题')
-        console2.muted('  使用 pls theme create <name> 创建')
+        console2.muted('  使用 ai theme create <name> 创建')
       }
     }
 
@@ -415,8 +415,8 @@ themeCmd
         console.log('')
       }
 
-      console2.muted('使用 pls theme list 查看所有主题')
-      console2.muted('使用 pls theme <name> 切换主题')
+      console2.muted('使用 ai theme list 查看所有主题')
+      console2.muted('使用 ai theme <name> 切换主题')
       console.log('')
       return
     }
@@ -499,15 +499,15 @@ themeCmd
       console2.muted(`     vim ${themePath}`)
       console.log('')
       console.log(`  2. 验证主题格式`)
-      console2.muted(`     pls theme validate ${themePath}`)
+      console2.muted(`     ai theme validate ${themePath}`)
       console.log('')
       console.log(`  3. 应用主题查看效果`)
-      console2.muted(`     pls theme ${name}`)
+      console2.muted(`     ai theme ${name}`)
       console.log('')
 
       console2.info('💡 提示:')
       console2.muted('  - 使用在线工具选择颜色: https://colorhunt.co')
-      console2.muted('  - 参考内置主题: pls theme list')
+      console2.muted('  - 参考内置主题: ai theme list')
       console.log('')
     } catch (error: any) {
       console.log('')
@@ -785,7 +785,7 @@ hookCmd
 
     if (!status.installed) {
       console.log('')
-      console2.muted('提示: 运行 pls hook install 安装 shell hook')
+      console2.muted('提示: 运行 ai hook install 安装 shell hook')
     }
     console.log('')
   })
@@ -814,9 +814,9 @@ hookCmd.action(() => {
 
   if (!status.installed) {
     console.log('')
-    console2.muted('提示: 运行 pls hook install 安装 shell hook')
+    console2.muted('提示: 运行 ai hook install 安装 shell hook')
   }
-  console.log('')
+        console.log('')
 })
 
 // upgrade 子命令
@@ -1136,7 +1136,7 @@ remoteHookCmd
 
       if (!status.installed) {
         console.log('')
-        console2.muted(`提示: 运行 pls remote hook install ${name} 安装 Shell Hook`)
+        console2.muted(`提示: 运行 ai remote hook install ${name} 安装 Shell Hook`)
       }
     } catch (error: any) {
       console2.error(`检查失败: ${error.message}`)
@@ -1211,11 +1211,11 @@ remoteCmd
           console.log(`  ${chalk.gray('→')} ${remote.user}@${remote.host}:${remote.port}`)
         } else {
           console2.warning(`默认服务器 "${config.defaultRemote}" 不存在，建议清除设置`)
-          console2.muted('运行 pls remote default --clear 清除')
+          console2.muted('运行 ai remote default --clear 清除')
         }
       } else {
         console2.muted('当前没有设置默认远程服务器')
-        console2.muted('使用 pls remote default <name> 设置默认服务器')
+        console2.muted('使用 ai remote default <name> 设置默认服务器')
       }
       console.log('')
       return
@@ -1226,7 +1226,7 @@ remoteCmd
     if (!remote) {
       console.log('')
       console2.error(`远程服务器不存在: ${name}`)
-      console2.muted('使用 pls remote list 查看所有服务器')
+      console2.muted('使用 ai remote list 查看所有服务器')
       console.log('')
       process.exit(1)
     }
@@ -1235,7 +1235,7 @@ remoteCmd
     console.log('')
     console2.success(`已设置默认远程服务器: ${name}`)
     console.log(`  ${chalk.gray('→')} ${remote.user}@${remote.host}:${remote.port}`)
-    console2.muted('现在可以使用 pls -r <prompt> 直接在该服务器执行')
+    console2.muted('现在可以使用 ai -r <prompt> 直接在该服务器执行')
     console.log('')
   })
 
@@ -1276,7 +1276,7 @@ remoteCmd
         console.log(`  ${chalk.gray('→')} ${remote.workDir}`)
       } else {
         console2.muted(`${name} 没有设置工作目录`)
-        console2.muted(`使用 pls remote workdir ${name} <path> 设置工作目录`)
+        console2.muted(`使用 ai remote workdir ${name} <path> 设置工作目录`)
       }
       console.log('')
       return
@@ -1321,8 +1321,8 @@ program
       console2.muted('━'.repeat(40))
       console.log('')
       console2.muted('用法:')
-      console2.info('  pls chat <问题>          与 AI 对话')
-      console2.info('  pls history chat clear   清空对话历史')
+      console2.info('  ai chat <问题>          与 AI 对话')
+      console2.info('  ai history chat clear   清空对话历史')
       console.log('')
       return
     }
@@ -1331,7 +1331,7 @@ program
     if (!isConfigValid()) {
       console.log('')
       console2.warning('⚠️  检测到尚未配置 API Key')
-      console2.info('请运行 pls config 启动交互式配置向导')
+      console2.info('请运行 ai config 启动交互式配置向导')
       console.log('')
       process.exit(1)
     }
@@ -1396,7 +1396,7 @@ program
     if (!prompt.trim()) {
       console.log('')
       console2.error('请提供你想执行的操作描述')
-      console2.muted('示例: pls 安装 git')
+      console2.muted('示例: ai 安装 git')
       console.log('')
       process.exit(1)
     }
@@ -1422,7 +1422,7 @@ program
     if (!isConfigValid()) {
       console.log('')
       console2.warning('⚠️  检测到尚未配置 API Key')
-      console2.info('请运行 pls config 启动交互式配置向导')
+      console2.info('请运行 ai config 启动交互式配置向导')
       console.log('')
       process.exit(1)
     }
@@ -1441,8 +1441,8 @@ program
         if (!config.defaultRemote) {
           console.log('')
           console2.error('未设置默认远程服务器')
-          console2.muted('使用 pls remote default <name> 设置默认服务器')
-          console2.muted('或使用 pls -r <name> <prompt> 指定服务器')
+      console2.muted('使用 ai remote default <name> 设置默认服务器')
+      console2.muted('或使用 ai -r <name> <prompt> 指定服务器')
           console.log('')
           process.exit(1)
         }
@@ -1457,8 +1457,8 @@ program
           if (invalidServers.length > 0) {
             console.log('')
             console2.error(`以下服务器不存在: ${invalidServers.join(', ')}`)
-            console2.muted('使用 pls remote list 查看所有服务器')
-            console2.muted('使用 pls remote add <name> <user@host> 添加服务器')
+            console2.muted('使用 ai remote list 查看所有服务器')
+            console2.muted('使用 ai remote add <name> <user@host> 添加服务器')
             console.log('')
             process.exit(1)
           }
@@ -1470,7 +1470,7 @@ program
           if (!remote) {
             console.log('')
             console2.error(`远程服务器不存在: ${remoteName}`)
-            console2.muted('使用 pls remote add <name> <user@host> 添加服务器')
+            console2.muted('使用 ai remote add <name> <user@host> 添加服务器')
             console.log('')
             process.exit(1)
           }
@@ -1892,30 +1892,30 @@ program.addHelpText(
   'after',
   `
 ${chalk.bold('示例:')}
-  ${chalk.hex(getThemeColors().primary)('pls 安装 git')}                    让 AI 生成安装 git 的命令
-  ${chalk.hex(getThemeColors().primary)('pls 查找大于 100MB 的文件')}        查找大文件
-  ${chalk.hex(getThemeColors().primary)('pls 删除刚才创建的文件')}          AI 会参考历史记录
-  ${chalk.hex(getThemeColors().primary)('pls --debug 压缩 logs 目录')}      显示调试信息
-  ${chalk.hex(getThemeColors().primary)('pls chat tar 命令怎么用')}         AI 对话模式
-  ${chalk.hex(getThemeColors().primary)('pls chat clear')}                 清空对话历史
-  ${chalk.hex(getThemeColors().primary)('pls history')}                    查看 pls 命令历史
-  ${chalk.hex(getThemeColors().primary)('pls history clear')}              清空历史记录
-  ${chalk.hex(getThemeColors().primary)('pls alias')}                      查看命令别名
-  ${chalk.hex(getThemeColors().primary)('pls alias add disk "查看磁盘"')}   添加别名
-  ${chalk.hex(getThemeColors().primary)('pls disk')}                       使用别名（等同于 pls @disk）
-  ${chalk.hex(getThemeColors().primary)('pls hook')}                       查看 shell hook 状态
-  ${chalk.hex(getThemeColors().primary)('pls hook install')}               安装 shell hook（增强功能）
-  ${chalk.hex(getThemeColors().primary)('pls hook uninstall')}             卸载 shell hook
-  ${chalk.hex(getThemeColors().primary)('pls upgrade')}                    升级到最新版本
-  ${chalk.hex(getThemeColors().primary)('pls config')}                     交互式配置
-  ${chalk.hex(getThemeColors().primary)('pls config list')}                查看当前配置
+  ${chalk.hex(getThemeColors().primary)('ai 安装 git')}                    让 AI 生成安装 git 的命令
+  ${chalk.hex(getThemeColors().primary)('ai 查找大于 100MB 的文件')}        查找大文件
+  ${chalk.hex(getThemeColors().primary)('ai 删除刚才创建的文件')}          AI 会参考历史记录
+  ${chalk.hex(getThemeColors().primary)('ai --debug 压缩 logs 目录')}      显示调试信息
+  ${chalk.hex(getThemeColors().primary)('ai chat tar 命令怎么用')}         AI 对话模式
+  ${chalk.hex(getThemeColors().primary)('ai chat clear')}                 清空对话历史
+  ${chalk.hex(getThemeColors().primary)('ai history')}                    查看 ai 命令历史
+  ${chalk.hex(getThemeColors().primary)('ai history clear')}              清空历史记录
+  ${chalk.hex(getThemeColors().primary)('ai alias')}                      查看命令别名
+  ${chalk.hex(getThemeColors().primary)('ai alias add disk "查看磁盘"')}   添加别名
+  ${chalk.hex(getThemeColors().primary)('ai disk')}                       使用别名（等同于 ai @disk）
+  ${chalk.hex(getThemeColors().primary)('ai hook')}                       查看 shell hook 状态
+  ${chalk.hex(getThemeColors().primary)('ai hook install')}               安装 shell hook（增强功能）
+  ${chalk.hex(getThemeColors().primary)('ai hook uninstall')}             卸载 shell hook
+  ${chalk.hex(getThemeColors().primary)('ai upgrade')}                    升级到最新版本
+  ${chalk.hex(getThemeColors().primary)('ai config')}                     交互式配置
+  ${chalk.hex(getThemeColors().primary)('ai config list')}                查看当前配置
 
 ${chalk.bold('远程执行:')}
-  ${chalk.hex(getThemeColors().primary)('pls remote')}                     查看远程服务器列表
-  ${chalk.hex(getThemeColors().primary)('pls remote add myserver root@1.2.3.4')}  添加服务器
-  ${chalk.hex(getThemeColors().primary)('pls remote test myserver')}       测试连接
-  ${chalk.hex(getThemeColors().primary)('pls -r myserver 查看磁盘')}       在远程服务器执行
-  ${chalk.hex(getThemeColors().primary)('pls remote hook install myserver')}  安装远程 Shell Hook
+  ${chalk.hex(getThemeColors().primary)('ai remote')}                     查看远程服务器列表
+  ${chalk.hex(getThemeColors().primary)('ai remote add myserver root@1.2.3.4')}  添加服务器
+  ${chalk.hex(getThemeColors().primary)('ai remote test myserver')}       测试连接
+  ${chalk.hex(getThemeColors().primary)('ai -r myserver 查看磁盘')}       在远程服务器执行
+  ${chalk.hex(getThemeColors().primary)('ai remote hook install myserver')}  安装远程 Shell Hook
 `
 )
 

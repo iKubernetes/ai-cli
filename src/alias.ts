@@ -172,7 +172,7 @@ function hasUnresolvedParams(prompt: string): string[] {
 
 /**
  * 解析别名
- * 支持 `pls disk` 和 `pls @disk` 两种格式
+ * 支持 `ai disk` 和 `ai @disk` 两种格式
  * @param input 用户输入（可能是别名或普通 prompt）
  * @returns 解析结果
  */
@@ -252,7 +252,7 @@ export function displayAliases(): void {
   if (aliasNames.length === 0) {
     console.log(chalk.gray('  暂无别名'))
     console.log('')
-    console.log(chalk.gray('  使用 pls alias add <name> "<prompt>" 添加别名'))
+    console.log(chalk.gray('  使用 ai alias add <name> "<prompt>" 添加别名'))
     console.log('')
     return
   }
@@ -286,7 +286,7 @@ export function displayAliases(): void {
   }
 
   console.log(chalk.gray('━'.repeat(50)))
-  console.log(chalk.gray('使用: pls <alias> 或 pls @<alias>'))
+  console.log(chalk.gray('使用: ai <alias> 或 ai @<alias>'))
   console.log('')
 }
 
