@@ -25,8 +25,8 @@ function getColors() {
 const SHELL_HISTORY_FILE = path.join(CONFIG_DIR, 'shell_history.jsonl')
 
 // Hook 标记，用于识别我们添加的内容
-const HOOK_START_MARKER = '# >>> pretty-please shell hook >>>'
-const HOOK_END_MARKER = '# <<< pretty-please shell hook <<<'
+const HOOK_START_MARKER = '# >>> ai-cli shell hook >>>'
+const HOOK_END_MARKER = '# <<< ai-cli shell hook <<<'
 
 // Shell 类型（保持向后兼容，但内部使用更细分的类型）
 type ShellType = 'zsh' | 'bash' | 'powershell' | 'unknown'
@@ -327,7 +327,7 @@ export async function installShellHook(): Promise<boolean> {
         console.log(chalk.hex(colors.warning)('⚠️  CMD 不支持 Shell Hook 功能'))
         console.log(chalk.hex(colors.secondary)('建议使用 PowerShell 获得完整体验：'))
         console.log(chalk.hex(colors.secondary)('  1. 按 Win 键搜索 "PowerShell"'))
-        console.log(chalk.hex(colors.secondary)('  2. 在 PowerShell 中运行 pls hook install'))
+        console.log(chalk.hex(colors.secondary)('  2. 在 PowerShell 中运行 ai hook install'))
         console.log('')
       }
     }
@@ -462,13 +462,13 @@ export function getShellHistory(): ShellHistoryItem[] {
 }
 
 /**
- * 从 pls history 中查找匹配的记录
+ * 从 ai history 中查找匹配的记录
  */
-function findPlsHistoryMatch(prompt: string): ReturnType<typeof getHistory>[number] | null {
-  const plsHistory = getHistory()
+function findAiHistoryMatch(prompt: string): ReturnType<typeof getHistory>[number] | null {
+  const aiHistory = getHistory()
 
   // 尝试精确匹配 userPrompt
-  for (const record of plsHistory) {
+  for (const record of aiHistory) {
     if (record.userPrompt === prompt) {
       return record
     }
@@ -476,7 +476,7 @@ function findPlsHistoryMatch(prompt: string): ReturnType<typeof getHistory>[numb
 
   // 尝试模糊匹配（处理引号等情况）
   const normalizedPrompt = prompt.trim().replace(/^["']|["']$/g, '')
-  for (const record of plsHistory) {
+  for (const record of aiHistory) {
     if (record.userPrompt === normalizedPrompt) {
       return record
     }
@@ -487,7 +487,7 @@ function findPlsHistoryMatch(prompt: string): ReturnType<typeof getHistory>[numb
 
 /**
  * 格式化 shell 历史供 AI 使用
- * 对于 pls 命令，会从 pls history 中查找对应的详细信息
+ * 对于 ai 命令，会从 ai history 中查找对应的详细信息
  */
 export function formatShellHistoryForAI(): string {
   const history = getShellHistory()
@@ -496,16 +496,16 @@ export function formatShellHistoryForAI(): string {
     return ''
   }
 
-  // pls 的子命令列表（这些不是 AI prompt）
-  const plsSubcommands = ['config', 'history', 'hook', 'help', '--help', '-h', '--version', '-v']
+  // ai 的子命令列表（这些不是 AI prompt）
+  const aiSubcommands = ['config', 'history', 'hook', 'help', '--help', '-h', '--version', '-v']
 
   const lines = history.map((item, index) => {
     const status = item.exit === 0 ? '✓' : `✗ 退出码:${item.exit}`
 
-    // 检查是否是 pls 命令
-    const plsMatch = item.cmd.match(/^(pls|please)\s+(.+)$/)
-    if (plsMatch) {
-      let args = plsMatch[2]
+    // 检查是否是 ai 命令
+    const aiMatch = item.cmd.match(/^(ai)\s+(.+)$/)
+    if (aiMatch) {
+      let args = aiMatch[2]
 
       // 去掉 --debug / -d 选项，获取真正的参数
       args = args.replace(/^(--debug|-d)\s+/, '')
@@ -513,33 +513,33 @@ export function formatShellHistoryForAI(): string {
       const firstArg = args.split(/\s+/)[0]
 
       // 如果是子命令，当作普通命令处理
-      if (plsSubcommands.includes(firstArg)) {
+      if (aiSubcommands.includes(firstArg)) {
         return `${index + 1}. ${item.cmd} ${status}`
       }
 
-      // 是 AI prompt，尝试从 pls history 查找详细信息
+      // 是 AI prompt，尝试从 ai history 查找详细信息
       const prompt = args
-      const plsRecord = findPlsHistoryMatch(prompt)
+      const aiRecord = findAiHistoryMatch(prompt)
 
-      if (plsRecord) {
-        // 找到对应的 pls 记录，展示详细信息
-        if (plsRecord.reason === 'builtin') {
-          return `${index + 1}. [pls] "${prompt}" → 生成命令: ${plsRecord.command} (包含 builtin，未执行)`
-        } else if (plsRecord.executed) {
-          const execStatus = plsRecord.exitCode === 0 ? '✓' : `✗ 退出码:${plsRecord.exitCode}`
+      if (aiRecord) {
+        // 找到对应的 ai 记录，展示详细信息
+        if (aiRecord.reason === 'builtin') {
+          return `${index + 1}. [ai] "${prompt}" → 生成命令: ${aiRecord.command} (包含 builtin，未执行)`
+        } else if (aiRecord.executed) {
+          const execStatus = aiRecord.exitCode === 0 ? '✓' : `✗ 退出码:${aiRecord.exitCode}`
 
           // 检查用户是否修改了命令
-          if (plsRecord.userModified && plsRecord.aiGeneratedCommand) {
-            return `${index + 1}. [pls] "${prompt}" → AI 生成: ${plsRecord.aiGeneratedCommand} / 用户修改为: ${plsRecord.command} ${execStatus}`
+          if (aiRecord.userModified && aiRecord.aiGeneratedCommand) {
+            return `${index + 1}. [ai] "${prompt}" → AI 生成: ${aiRecord.aiGeneratedCommand} / 用户修改为: ${aiRecord.command} ${execStatus}`
           } else {
-            return `${index + 1}. [pls] "${prompt}" → 实际执行: ${plsRecord.command} ${execStatus}`
+            return `${index + 1}. [ai] "${prompt}" → 实际执行: ${aiRecord.command} ${execStatus}`
           }
         } else {
-          return `${index + 1}. [pls] "${prompt}" → 生成命令: ${plsRecord.command} (用户取消执行)`
+          return `${index + 1}. [ai] "${prompt}" → 生成命令: ${aiRecord.command} (用户取消执行)`
         }
       }
       // 找不到记录，只显示原始命令
-      return `${index + 1}. [pls] "${prompt}" ${status}`
+      return `${index + 1}. [ai] "${prompt}" ${status}`
     }
 
     // 普通命令
@@ -583,7 +583,7 @@ export function displayShellHistory(): void {
   if (!config.shellHook) {
     console.log('')
     console.log(chalk.hex(colors.warning)('⚠️  Shell Hook 未启用'))
-    console.log(chalk.gray('运行 ') + chalk.hex(colors.primary)('pls hook install') + chalk.gray(' 启用 Shell Hook'))
+    console.log(chalk.gray('运行 ') + chalk.hex(colors.primary)('ai hook install') + chalk.gray(' 启用 Shell Hook'))
     console.log('')
     return
   }
@@ -603,29 +603,29 @@ export function displayShellHistory(): void {
     const num = index + 1
     const status = item.exit === 0 ? chalk.hex(colors.success)('✓') : chalk.hex(colors.error)(`✗ (${item.exit})`)
 
-    // 检查是否是 pls 命令
-    const isPls = item.cmd.startsWith('pls ') || item.cmd.startsWith('please ')
+    // 检查是否是 ai 命令
+    const isAi = item.cmd.startsWith('ai ')
 
-    if (isPls) {
-      // pls 命令：尝试从 history 查找详细信息
-      const args = item.cmd.replace(/^(pls|please)\s+/, '')
-      const plsRecord = findPlsHistoryMatch(args)
+    if (isAi) {
+      // ai 命令：尝试从 history 查找详细信息
+      const args = item.cmd.replace(/^ai\s+/, '')
+      const aiRecord = findAiHistoryMatch(args)
 
-      if (plsRecord && plsRecord.executed) {
+      if (aiRecord && aiRecord.executed) {
         // 检查用户是否修改了命令
-        if (plsRecord.userModified && plsRecord.aiGeneratedCommand) {
-          console.log(`  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[pls]')} "${args}"`)
-          console.log(`     ${chalk.dim('AI 生成:')} ${chalk.gray(plsRecord.aiGeneratedCommand)}`)
+        if (aiRecord.userModified && aiRecord.aiGeneratedCommand) {
+          console.log(`  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[ai]')} "${args}"`)
+          console.log(`     ${chalk.dim('AI 生成:')} ${chalk.gray(aiRecord.aiGeneratedCommand)}`)
           console.log(
-            `     ${chalk.dim('用户修改为:')} ${plsRecord.command} ${status} ${chalk.hex(colors.warning)('(已修改)')}`
+            `     ${chalk.dim('用户修改为:')} ${aiRecord.command} ${status} ${chalk.hex(colors.warning)('(已修改)')}`
           )
         } else {
           console.log(
-            `  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[pls]')} "${args}" → ${plsRecord.command} ${status}`
+            `  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[ai]')} "${args}" → ${aiRecord.command} ${status}`
           )
         }
       } else {
-        console.log(`  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[pls]')} ${args} ${status}`)
+        console.log(`  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${chalk.hex(colors.secondary)('[ai]')} ${args} ${status}`)
       }
     } else {
       console.log(`  ${chalk.hex(colors.primary)(num.toString().padStart(2, ' '))}. ${item.cmd} ${status}`)
@@ -746,16 +746,16 @@ export function getShellHistoryWithFallback(): ShellHistoryItem[] {
 }
 
 /**
- * 获取最近一条非 pls 的命令（统一接口）
+ * 获取最近一条非 AI 命令（统一接口）
  * 自动选择最佳历史来源
  */
 export function getLastNonPlsCommand(): ShellHistoryItem | null {
   const history = getShellHistoryWithFallback()
 
-  // 从后往前找第一条非 pls 命令
+  // 从后往前找第一条非 ai 命令
   for (let i = history.length - 1; i >= 0; i--) {
     const item = history[i]
-    if (!item.cmd.startsWith('pls') && !item.cmd.startsWith('please')) {
+    if (!item.cmd.startsWith('ai ')) {
       return item
     }
   }

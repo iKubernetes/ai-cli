@@ -18,7 +18,7 @@ function getColors() {
 }
 
 // 配置文件路径
-export const CONFIG_DIR = path.join(os.homedir(), '.please')
+export const CONFIG_DIR = path.join(os.homedir(), '.ai-cli')
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json')
 
 // 支持的 Provider 列表
@@ -294,7 +294,7 @@ export async function runConfigWizard(): Promise<void> {
   const config = getConfig()
   const colors = getColors()
 
-  console.log(chalk.bold.hex(colors.primary)('\n🔧 Pretty Please 配置向导'))
+  console.log(chalk.bold.hex(colors.primary)('\n🔧 AI-CLI 配置向导'))
   console.log(chalk.gray('━'.repeat(50)))
   console.log(chalk.gray('直接回车使用默认值，输入值后回车确认\n'))
 

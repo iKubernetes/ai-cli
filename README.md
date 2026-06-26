@@ -1,10 +1,10 @@
-# Pretty Please (pls)
+# 马哥教育AI学习助手 (pls)
 
 <p align="center">
-  <strong>"Pretty please?" — 用最礼貌的方式，让 AI 帮你干活</strong>
+  <strong>"马哥教育AI学习助手" — 专为马哥教育学员打造的 AI 命令行学习工具</strong>
 </p>
 
-> `please 查看当前目录` — 就像在跟电脑说话一样自然
+> `please 查看当前目录` — 让 AI 帮你干活，专注学习 Linux 和编程
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/aeebcac4-ee52-4b9d-b2c9-77c2930e7454" alt="Pretty Please Demo" width="800">

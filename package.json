@@ -1,22 +1,21 @@
 {
-  "name": "@yivan-lab/pretty-please",
-  "version": "1.5.5",
-  "description": "AI 驱动的命令行工具，将自然语言转换为可执行的 Shell 命令",
+  "name": "@ikubernetes/ai-cli",
+  "version": "1.6.0",
+  "description": "马哥教育AI学习助手 — 将自然语言转换为可执行的 Shell 命令",
   "type": "module",
   "bin": {
-    "pls": "./dist/bin/pls.js",
-    "please": "./dist/bin/pls.js"
+    "ai": "./dist/bin/ai.js"
   },
   "scripts": {
-    "dev": "tsx bin/pls.tsx",
+    "dev": "tsx bin/ai.tsx",
     "build": "tsc && node scripts/postbuild.js",
-    "start": "node dist/bin/pls.js",
+    "start": "node dist/bin/ai.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "link:dev": "mkdir -p ~/.local/bin && ln -sf \"$(pwd)/bin/pls.tsx\" ~/.local/bin/pls-dev && echo '✅ pls-dev 已链接到 ~/.local/bin/pls-dev'",
-    "unlink:dev": "rm -f ~/.local/bin/pls-dev && echo '✅ pls-dev 已移除'",
+    "link:dev": "mkdir -p ~/.local/bin && ln -sf \"$(pwd)/bin/ai.tsx\" ~/.local/bin/ai-dev && echo '✅ ai-dev 已链接到 ~/.local/bin/ai-dev'",
+    "unlink:dev": "rm -f ~/.local/bin/ai-dev && echo '✅ ai-dev 已移除'",
     "prepublishOnly": "pnpm build"
   },
   "keywords": [
@@ -31,16 +30,16 @@
     "mastra",
     "deepseek"
   ],
-  "author": "yivan-lab",
+  "author": "ikubernetes",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IvanLark/pretty-please.git"
+    "url": "https://github.com/ikubernetes/ai-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/IvanLark/pretty-please/issues"
+    "url": "https://github.com/ikubernetes/ai-cli/issues"
   },
-  "homepage": "https://github.com/IvanLark/pretty-please#readme",
+  "homepage": "https://github.com/ikubernetes/ai-cli#readme",
   "publishConfig": {
     "access": "public"
   },

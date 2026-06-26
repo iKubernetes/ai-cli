@@ -75,7 +75,7 @@ jobs:
           VERSION="${TAG#v}"
 
           # 生成文件名
-          ARTIFACT="pls-v${VERSION}-${{ matrix.platform }}"
+          ARTIFACT="ai-v${VERSION}-${{ matrix.platform }}"
 
           echo "artifact=${ARTIFACT}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -100,11 +100,11 @@ jobs:
           mkdir -p packaging
 
           # 复制二进制和 LICENSE
-          cp "${ARTIFACT}" packaging/pls
+          cp "${ARTIFACT}" packaging/ai
           cp LICENSE packaging/LICENSE
 
           # 打包为 tar.gz
-          tar -czf "${TAR_NAME}" -C packaging pls LICENSE
+          tar -czf "${TAR_NAME}" -C packaging ai LICENSE
 
           # 清理
           rm -rf packaging
@@ -136,7 +136,7 @@ jobs:
           $VERSION = $TAG.TrimStart('v')
 
           # 生成文件名
-          $ARTIFACT = "pls-v${VERSION}-${{ matrix.platform }}.exe"
+          $ARTIFACT = "ai-v${VERSION}-${{ matrix.platform }}.exe"
 
           echo "artifact=${ARTIFACT}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           echo "version=${VERSION}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
@@ -225,10 +225,10 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
         run: |
           # 修改 install.sh，使用 R2 作为下载源
-          sed 's|DOWNLOAD_BASE="https://github.com/\${REPO}/releases/download"|DOWNLOAD_BASE="https://dl.pretty-please.site"|' install.sh > install-r2.sh
+          sed 's|DOWNLOAD_BASE="https://github.com/\${REPO}/releases/download"|DOWNLOAD_BASE="https://dl.ai-cli.site"|' install.sh > install-r2.sh
 
           # 修改 install.ps1，使用 R2 作为下载源
-          sed 's|DOWNLOAD_BASE = "https://github.com/\$REPO/releases/download"|DOWNLOAD_BASE = "https://dl.pretty-please.site"|' install.ps1 > install-r2.ps1
+          sed 's|DOWNLOAD_BASE = "https://github.com/\$REPO/releases/download"|DOWNLOAD_BASE = "https://dl.ai-cli.site"|' install.ps1 > install-r2.ps1
 
           # 上传到 R2
           aws s3 cp install-r2.sh "s3://${R2_BUCKET}/install.sh" --endpoint-url "${R2_ENDPOINT}" --content-type "text/plain; charset=utf-8"

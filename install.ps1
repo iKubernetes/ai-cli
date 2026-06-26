@@ -1,12 +1,12 @@
-# Pretty-Please (pls) Windows 安装脚本
-# 使用方法: irm https://raw.githubusercontent.com/IvanLark/pretty-please/main/install.ps1 | iex
-# 国内加速: irm https://dl.pretty-please.site/install.ps1 | iex
+# AI-CLI (ai) Windows 安装脚本 - 马哥教育AI学习助手
+# 使用方法: irm https://raw.githubusercontent.com/ikubernetes/ai-cli/main/install.ps1 | iex
+# 国内加速: irm https://dl.ai-cli.site/install.ps1 | iex
 
 $ErrorActionPreference = "Stop"
 
-$REPO = "IvanLark/pretty-please"
-$BINARY_NAME = "pls.exe"
-$INSTALL_DIR = "$env:LOCALAPPDATA\Programs\pls"
+$REPO = "ikubernetes/ai-cli"
+$BINARY_NAME = "ai.exe"
+$INSTALL_DIR = "$env:LOCALAPPDATA\Programs\ai-cli"
 # 下载源（GitHub 版本默认从 GitHub 下载，R2 版本会被替换为 R2 地址）
 $DOWNLOAD_BASE = "https://github.com/$REPO/releases/download"
 
@@ -23,8 +23,8 @@ function Get-LatestVersion {
 function Main {
     Write-Host ""
     Write-Host "╭─────────────────────────────────────────╮" -ForegroundColor Cyan
-    Write-Host "│     Pretty-Please (pls) 安装程序        │" -ForegroundColor Cyan
-    Write-Host "│     AI 驱动的命令行助手                 │" -ForegroundColor Cyan
+    Write-Host "│     AI-CLI (ai) 安装程序                │" -ForegroundColor Cyan
+    Write-Host "│     马哥教育AI学习助手                   │" -ForegroundColor Cyan
     Write-Host "╰─────────────────────────────────────────╯" -ForegroundColor Cyan
     Write-Host ""
 
@@ -61,7 +61,7 @@ function Main {
 
     # 构建下载 URL
     $VERSION_NO_V = $VERSION -replace '^v', ''
-    $DOWNLOAD_URL = "$DOWNLOAD_BASE/$VERSION/pls-v${VERSION_NO_V}-${PLATFORM}.exe"
+    $DOWNLOAD_URL = "$DOWNLOAD_BASE/$VERSION/ai-v${VERSION_NO_V}-${PLATFORM}.exe"
     Write-Info "下载地址: $DOWNLOAD_URL"
 
     # 创建安装目录
@@ -105,11 +105,11 @@ function Main {
     Write-Host ""
     Write-Host "安装成功! " -ForegroundColor Green -NoNewline
     Write-Host "运行 " -NoNewline
-    Write-Host "pls --help" -ForegroundColor Cyan -NoNewline
+    Write-Host "ai --help" -ForegroundColor Cyan -NoNewline
     Write-Host " 查看帮助"
     Write-Host ""
     Write-Host "首次使用请运行 " -NoNewline
-    Write-Host "pls config" -ForegroundColor Cyan -NoNewline
+    Write-Host "ai config" -ForegroundColor Cyan -NoNewline
     Write-Host " 配置 API Key"
     Write-Host ""
 }

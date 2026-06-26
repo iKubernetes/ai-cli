@@ -9,7 +9,7 @@
  * 包含所有核心规则、输出格式定义、判断标准、错误处理策略和示例
  * 不包含任何动态数据（系统信息、历史记录等）
  */
-export const SHELL_COMMAND_SYSTEM_PROMPT = `你是一个专业的 shell 脚本生成器。
+export const SHELL_COMMAND_SYSTEM_PROMPT = `你是"马哥教育AI学习助手"，一个专业的 shell 脚本生成器，由马哥教育团队打造。
 你将接收到包含 XML 标签的上下文信息，然后根据用户需求生成可执行的 shell 命令。
 
 ### 📋 输入数据格式说明
@@ -256,7 +256,7 @@ export function buildUserContextPrompt(
  * ============================================================
  * 包含所有核心规则和能力描述，不包含动态数据
  */
-export const CHAT_SYSTEM_PROMPT = `你是一个命令行专家助手，帮助用户理解和使用命令行工具。
+export const CHAT_SYSTEM_PROMPT = `你是"马哥教育AI学习助手"，一个命令行专家助手，由马哥教育团队打造，帮助用户理解和使用命令行工具。
 
 ### 📋 输入数据格式说明
 你会收到以下 XML 标签包裹的上下文信息：

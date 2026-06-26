@@ -20,8 +20,8 @@ function getColors() {
   }
 }
 
-const REPO = 'IvanLark/pretty-please'
-const UPDATE_CHECK_FILE = path.join(os.homedir(), '.please', 'update-check.json')
+const REPO = 'ikubernetes/ai-cli'
+const UPDATE_CHECK_FILE = path.join(os.homedir(), '.ai-cli', 'update-check.json')
 const CHECK_INTERVAL = 24 * 60 * 60 * 1000 // 24 小时
 
 interface UpdateCheckCache {
@@ -101,19 +101,19 @@ export function detectPlatform(): { os: string; arch: string; artifact: string }
 
   if (platform === 'darwin') {
     if (arch === 'arm64') {
-      return { os: 'darwin', arch: 'arm64', artifact: 'pls-darwin-arm64' }
+      return { os: 'darwin', arch: 'arm64', artifact: 'ai-darwin-arm64' }
     } else if (arch === 'x64') {
-      return { os: 'darwin', arch: 'x64', artifact: 'pls-darwin-x64' }
+      return { os: 'darwin', arch: 'x64', artifact: 'ai-darwin-x64' }
     }
   } else if (platform === 'linux') {
     if (arch === 'arm64') {
-      return { os: 'linux', arch: 'arm64', artifact: 'pls-linux-arm64' }
+      return { os: 'linux', arch: 'arm64', artifact: 'ai-linux-arm64' }
     } else if (arch === 'x64') {
-      return { os: 'linux', arch: 'x64', artifact: 'pls-linux-x64' }
+      return { os: 'linux', arch: 'x64', artifact: 'ai-linux-x64' }
     }
   } else if (platform === 'win32') {
     if (arch === 'x64') {
-      return { os: 'windows', arch: 'x64', artifact: 'pls-windows-x64.exe' }
+      return { os: 'windows', arch: 'x64', artifact: 'ai-windows-x64.exe' }
     }
   }
 
@@ -197,7 +197,7 @@ export function showUpdateNotice(currentVersion: string, latestVersion: string):
   const colors = getColors()
   // 使用简洁的单行提示，避免复杂的对齐问题
   console.log('')
-  console2.warning(`发现新版本: ${currentVersion} → ${chalk.hex(colors.success)(latestVersion)}，运行 ${chalk.hex(colors.primary)('pls upgrade')} 更新`)
+  console2.warning(`发现新版本: ${currentVersion} → ${chalk.hex(colors.success)(latestVersion)}，运行 ${chalk.hex(colors.primary)('ai upgrade')} 更新`)
 }
 
 /**
@@ -255,7 +255,7 @@ export function isBunBinary(): boolean {
  */
 export async function performUpgrade(currentVersion: string): Promise<boolean> {
   console.log('')
-  console2.title('🚀 Pretty-Please 升级')
+  console2.title('🚀 AI-CLI 升级')
   console2.muted('━'.repeat(40))
 
   // 检测平台
@@ -290,7 +290,7 @@ export async function performUpgrade(currentVersion: string): Promise<boolean> {
     console.log('')
     console2.warning('检测到你是通过 npm 安装的，请使用以下命令更新:')
     console.log('')
-    console.log(chalk.hex(getColors().primary)('  npm update -g @yivan-lab/pretty-please'))
+    console.log(chalk.hex(getColors().primary)('  npm update -g @ikubernetes/ai-cli'))
     console.log('')
     return false
   }
@@ -301,7 +301,7 @@ export async function performUpgrade(currentVersion: string): Promise<boolean> {
 
   // 下载新版本
   const downloadUrl = `https://github.com/${REPO}/releases/download/${latestVersion}/${platform.artifact}`
-  const tempFile = path.join(os.tmpdir(), `pls-upgrade-${Date.now()}`)
+  const tempFile = path.join(os.tmpdir(), `ai-upgrade-${Date.now()}`)
 
   console2.info('下载中...')
 
@@ -346,7 +346,7 @@ echo 升级完成! ${currentVersion} → ${latestVersion}
 echo.
 pause
 `
-      const batchPath = path.join(os.tmpdir(), 'pls-upgrade.bat')
+      const batchPath = path.join(os.tmpdir(), 'ai-upgrade.bat')
       fs.writeFileSync(batchPath, batchScript)
 
       console.log('')
@@ -393,7 +393,7 @@ pause
       console.log('')
       console2.warning('权限不足，请尝试使用 sudo:')
       console.log('')
-      console.log(chalk.hex(getColors().primary)('  sudo pls upgrade'))
+      console.log(chalk.hex(getColors().primary)('  sudo ai upgrade'))
       console.log('')
     }
 

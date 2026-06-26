@@ -1,13 +1,13 @@
 #!/bin/bash
-# Pretty-Please (pls) 安装脚本
-# 使用方法: curl -fsSL https://raw.githubusercontent.com/IvanLark/pretty-please/main/install.sh | bash
-# 国内加速: curl -fsSL https://dl.pretty-please.site/install.sh | bash
+# AI-CLI (ai) 安装脚本 - 马哥教育AI学习助手
+# 使用方法: curl -fsSL https://raw.githubusercontent.com/ikubernetes/ai-cli/main/install.sh | bash
+# 国内加速: curl -fsSL https://dl.ai-cli.site/install.sh | bash
 
 set -e
 
-REPO="IvanLark/pretty-please"
+REPO="ikubernetes/ai-cli"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
-BINARY_NAME="pls"
+BINARY_NAME="ai"
 # 下载源（GitHub 版本默认从 GitHub 下载，R2 版本会被替换为 R2 地址）
 DOWNLOAD_BASE="https://github.com/${REPO}/releases/download"
 
@@ -72,8 +72,8 @@ get_latest_version() {
 main() {
     echo ""
     echo -e "${CYAN}╭─────────────────────────────────────────╮${NC}"
-    echo -e "${CYAN}│${NC}     ${GREEN}Pretty-Please (pls) 安装程序${NC}        ${CYAN}│${NC}"
-    echo -e "${CYAN}│${NC}     AI 驱动的命令行助手                ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}     ${GREEN}AI-CLI (ai) 安装程序${NC}               ${CYAN}│${NC}"
+    echo -e "${CYAN}│${NC}     马哥教育AI学习助手                  ${CYAN}│${NC}"
     echo -e "${CYAN}╰─────────────────────────────────────────╯${NC}"
     echo ""
 
@@ -91,7 +91,7 @@ main() {
     success "版本: $VERSION"
 
     # 构建下载 URL
-    DOWNLOAD_URL="${DOWNLOAD_BASE}/${VERSION}/pls-v${VERSION#v}-${PLATFORM}.tar.gz"
+    DOWNLOAD_URL="${DOWNLOAD_BASE}/${VERSION}/ai-v${VERSION#v}-${PLATFORM}.tar.gz"
     info "下载地址: $DOWNLOAD_URL"
 
     # 创建安装目录
@@ -114,7 +114,7 @@ main() {
 
     # 安装
     info "安装到 $INSTALL_DIR/$BINARY_NAME"
-    mv "${TMP_DIR}/pls" "$INSTALL_DIR/$BINARY_NAME"
+    mv "${TMP_DIR}/ai" "$INSTALL_DIR/$BINARY_NAME"
     chmod +x "$INSTALL_DIR/$BINARY_NAME"
     rm -rf "$TMP_DIR"
     success "安装完成!"
@@ -132,9 +132,9 @@ main() {
     fi
 
     echo ""
-    echo -e "${GREEN}安装成功!${NC} 运行 ${CYAN}pls --help${NC} 查看帮助"
+    echo -e "${GREEN}安装成功!${NC} 运行 ${CYAN}ai --help${NC} 查看帮助"
     echo ""
-    echo "首次使用请运行 ${CYAN}pls config${NC} 配置 API Key"
+    echo "首次使用请运行 ${CYAN}ai config${NC} 配置 API Key"
     echo ""
 }
 

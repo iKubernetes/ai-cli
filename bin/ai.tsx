@@ -272,7 +272,7 @@ function executeCommand(command: string): Promise<{ exitCode: number; output: st
 
 // 设置程序
 program
-  .name('pls')
+  .name('ai')
   .description('马哥教育AI学习助手 — 将自然语言转换为可执行的 Shell 命令')
   .version(packageJson.version, '-v, --version', '显示版本号')
   .helpOption('-h, --help', '显示帮助信息')
@@ -385,7 +385,7 @@ themeCmd
       } else if (options.custom) {
         console.log('')
         console2.muted('  还没有自定义主题')
-        console2.muted('  使用 pls theme create <name> 创建')
+        console2.muted('  使用 ai theme create <name> 创建')
       }
     }
 
@@ -415,8 +415,8 @@ themeCmd
         console.log('')
       }
 
-      console2.muted('使用 pls theme list 查看所有主题')
-      console2.muted('使用 pls theme <name> 切换主题')
+      console2.muted('使用 ai theme list 查看所有主题')
+      console2.muted('使用 ai theme <name> 切换主题')
       console.log('')
       return
     }
@@ -499,15 +499,15 @@ themeCmd
       console2.muted(`     vim ${themePath}`)
       console.log('')
       console.log(`  2. 验证主题格式`)
-      console2.muted(`     pls theme validate ${themePath}`)
+      console2.muted(`     ai theme validate ${themePath}`)
       console.log('')
       console.log(`  3. 应用主题查看效果`)
-      console2.muted(`     pls theme ${name}`)
+      console2.muted(`     ai theme ${name}`)
       console.log('')
 
       console2.info('💡 提示:')
       console2.muted('  - 使用在线工具选择颜色: https://colorhunt.co')
-      console2.muted('  - 参考内置主题: pls theme list')
+      console2.muted('  - 参考内置主题: ai theme list')
       console.log('')
     } catch (error: any) {
       console.log('')
@@ -785,7 +785,7 @@ hookCmd
 
     if (!status.installed) {
       console.log('')
-      console2.muted('提示: 运行 pls hook install 安装 shell hook')
+      console2.muted('提示: 运行 ai hook install 安装 shell hook')
     }
     console.log('')
   })
@@ -814,7 +814,7 @@ hookCmd.action(() => {
 
   if (!status.installed) {
     console.log('')
-    console2.muted('提示: 运行 pls hook install 安装 shell hook')
+    console2.muted('提示: 运行 ai hook install 安装 shell hook')
   }
   console.log('')
 })
@@ -1136,7 +1136,7 @@ remoteHookCmd
 
       if (!status.installed) {
         console.log('')
-        console2.muted(`提示: 运行 pls remote hook install ${name} 安装 Shell Hook`)
+        console2.muted(`提示: 运行 ai remote hook install ${name} 安装 Shell Hook`)
       }
     } catch (error: any) {
       console2.error(`检查失败: ${error.message}`)
@@ -1211,11 +1211,11 @@ remoteCmd
           console.log(`  ${chalk.gray('→')} ${remote.user}@${remote.host}:${remote.port}`)
         } else {
           console2.warning(`默认服务器 "${config.defaultRemote}" 不存在，建议清除设置`)
-          console2.muted('运行 pls remote default --clear 清除')
+          console2.muted('运行 ai remote default --clear 清除')
         }
       } else {
         console2.muted('当前没有设置默认远程服务器')
-        console2.muted('使用 pls remote default <name> 设置默认服务器')
+        console2.muted('使用 ai remote default <name> 设置默认服务器')
       }
       console.log('')
       return
@@ -1226,7 +1226,7 @@ remoteCmd
     if (!remote) {
       console.log('')
       console2.error(`远程服务器不存在: ${name}`)
-      console2.muted('使用 pls remote list 查看所有服务器')
+      console2.muted('使用 ai remote list 查看所有服务器')
       console.log('')
       process.exit(1)
     }
@@ -1235,7 +1235,7 @@ remoteCmd
     console.log('')
     console2.success(`已设置默认远程服务器: ${name}`)
     console.log(`  ${chalk.gray('→')} ${remote.user}@${remote.host}:${remote.port}`)
-    console2.muted('现在可以使用 pls -r <prompt> 直接在该服务器执行')
+    console2.muted('现在可以使用 ai -r <prompt> 直接在该服务器执行')
     console.log('')
   })
 
@@ -1276,7 +1276,7 @@ remoteCmd
         console.log(`  ${chalk.gray('→')} ${remote.workDir}`)
       } else {
         console2.muted(`${name} 没有设置工作目录`)
-        console2.muted(`使用 pls remote workdir ${name} <path> 设置工作目录`)
+        console2.muted(`使用 ai remote workdir ${name} <path> 设置工作目录`)
       }
       console.log('')
       return
@@ -1321,8 +1321,8 @@ program
       console2.muted('━'.repeat(40))
       console.log('')
       console2.muted('用法:')
-      console2.info('  pls chat <问题>          与 AI 对话')
-      console2.info('  pls history chat clear   清空对话历史')
+      console2.info('  ai chat <问题>          与 AI 对话')
+      console2.info('  ai history chat clear   清空对话历史')
       console.log('')
       return
     }
@@ -1331,7 +1331,7 @@ program
     if (!isConfigValid()) {
       console.log('')
       console2.warning('⚠️  检测到尚未配置 API Key')
-      console2.info('请运行 pls config 启动交互式配置向导')
+      console2.info('请运行 ai config 启动交互式配置向导')
       console.log('')
       process.exit(1)
     }
@@ -1396,12 +1396,12 @@ program
     if (!prompt.trim()) {
       console.log('')
       console2.error('请提供你想执行的操作描述')
-      console2.muted('示例: pls 安装 git')
+      console2.muted('示例: ai 安装 git')
       console.log('')
       process.exit(1)
     }
 
-    // 尝试解析别名（支持 pls disk 和 pls @disk 两种格式）
+    // 尝试解析别名（支持 ai disk 和 ai @disk 两种格式）
     try {
       const aliasResult = resolveAlias(prompt)
       if (aliasResult.resolved) {
@@ -1422,55 +1422,45 @@ program
     if (!isConfigValid()) {
       console.log('')
       console2.warning('⚠️  检测到尚未配置 API Key')
-      console2.info('请运行 pls config 启动交互式配置向导')
+      console2.info('请运行 ai config 启动交互式配置向导')
       console.log('')
       process.exit(1)
     }
 
     // 解析远程服务器名称
-    // options.remote 可能是：
-    // - undefined: 没有使用 -r
-    // - true: 使用了 -r 但没有指定名称（使用默认）
-    // - string: 使用了 -r 并指定了名称（支持逗号分隔的多个服务器）
     let remoteName: string | undefined
-    let remoteNames: string[] | undefined  // 批量执行时的服务器列表
+    let remoteNames: string[] | undefined
     if (options.remote !== undefined) {
       if (options.remote === true) {
-        // 使用默认服务器
         const config = getConfig()
         if (!config.defaultRemote) {
           console.log('')
           console2.error('未设置默认远程服务器')
-          console2.muted('使用 pls remote default <name> 设置默认服务器')
-          console2.muted('或使用 pls -r <name> <prompt> 指定服务器')
+          console2.muted('使用 ai remote default <name> 设置默认服务器')
+          console2.muted('或使用 ai -r <name> <prompt> 指定服务器')
           console.log('')
           process.exit(1)
         }
         remoteName = config.defaultRemote
       } else {
-        // 检查是否为批量执行（逗号分隔的服务器名）
         if (options.remote.includes(',')) {
           remoteNames = options.remote.split(',').map(s => s.trim()).filter(s => s.length > 0)
-
-          // 验证所有服务器是否存在
           const invalidServers = remoteNames!.filter(name => !getRemote(name))
           if (invalidServers.length > 0) {
             console.log('')
             console2.error(`以下服务器不存在: ${invalidServers.join(', ')}`)
-            console2.muted('使用 pls remote list 查看所有服务器')
-            console2.muted('使用 pls remote add <name> <user@host> 添加服务器')
+            console2.muted('使用 ai remote list 查看所有服务器')
+            console2.muted('使用 ai remote add <name> <user@host> 添加服务器')
             console.log('')
             process.exit(1)
           }
         } else {
           remoteName = options.remote
-
-          // 检查服务器是否存在
           const remote = getRemote(remoteName!)
           if (!remote) {
             console.log('')
             console2.error(`远程服务器不存在: ${remoteName}`)
-            console2.muted('使用 pls remote add <name> <user@host> 添加服务器')
+            console2.muted('使用 ai remote add <name> <user@host> 添加服务器')
             console.log('')
             process.exit(1)
           }
@@ -1478,19 +1468,14 @@ program
       }
     }
 
-    // 懒加载 MultiStepCommandGenerator 组件（避免启动时加载 React/Ink）
     ;(async () => {
-      // 批量远程执行模式
       if (remoteNames && remoteNames.length > 0) {
+        // batch remote execution...
         console.log('')
         console2.info(`正在为 ${remoteNames.length} 台服务器生成命令...`)
         console.log('')
-
         try {
-          // 1. 并发生成命令
           const commands = await generateBatchRemoteCommands(remoteNames, prompt, { debug: options.debug })
-
-          // 2. 显示生成的命令
           console2.success('✓ 命令生成完成\n')
           const theme = getCurrentTheme()
           commands.forEach(({ server, command, sysInfo }) => {
@@ -1498,87 +1483,42 @@ program
             console.log(chalk.hex(theme.secondary)(`  ${command}`))
           })
           console.log('')
-
-          // 3. 询问用户确认
           const readline = await import('readline')
-          const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-          })
-
+          const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
           const confirmed = await new Promise<boolean>((resolve) => {
             console.log(chalk.gray(`将在 ${remoteNames!.length} 台服务器执行以上命令`))
-            rl.question(chalk.gray('执行？ [回车执行 / Ctrl+C 取消] '), (answer) => {
-              rl.close()
-              resolve(true)
-            })
+            rl.question(chalk.gray('执行？ [回车执行 / Ctrl+C 取消] '), (answer) => { rl.close(); resolve(true) })
           })
-
-          if (!confirmed) {
-            console.log('')
-            console2.muted('已取消执行')
-            console.log('')
-            process.exit(0)
-          }
-
-          // 4. 并发执行
-          console.log('')
-          console2.info('正在执行...')
+          if (!confirmed) { console.log(''); console2.muted('已取消执行'); console.log(''); process.exit(0) }
+          console.log(''); console2.info('正在执行...')
           const results = await executeBatchRemoteCommands(commands)
-
-          // 5. 显示执行结果摘要
-          console.log('')
-          console2.info('执行完成:\n')
+          console.log(''); console2.info('执行完成:\n')
           results.forEach(({ server, exitCode }) => {
             const icon = exitCode === 0 ? '✓' : '✗'
             const color = exitCode === 0 ? theme.success : theme.error
             console.log(`  ${chalk.hex(color)(icon)} ${server} ${chalk.gray(`(退出码: ${exitCode})`)}`)
           })
-
-          // 6. 显示每个服务器的详细输出
           console.log('')
           results.forEach(({ server, output }) => {
             console.log(chalk.hex(theme.primary)(`─── ${server} ───`))
             console.log(output || chalk.gray('(无输出)'))
           })
-
-          // 7. 记录到历史
           results.forEach(({ server, command, exitCode, output }) => {
-            addRemoteHistory(server, {
-              userPrompt: prompt,
-              command,
-              aiGeneratedCommand: command,  // 批量执行无编辑功能
-              userModified: false,
-              executed: true,
-              exitCode,
-              output,
-            })
+            addRemoteHistory(server, { userPrompt: prompt, command, aiGeneratedCommand: command, userModified: false, executed: true, exitCode, output })
           })
-
-          // 8. 根据结果决定退出码
           const allSuccess = results.every(r => r.exitCode === 0)
           const allFailed = results.every(r => r.exitCode !== 0)
-          if (allFailed) {
-            process.exit(2)  // 全部失败
-          } else if (!allSuccess) {
-            process.exit(1)  // 部分失败
-          }
-          process.exit(0)  // 全部成功
-        } catch (error: any) {
-          console.log('')
-          console2.error(`批量执行失败: ${error.message}`)
-          console.log('')
-          process.exit(1)
-        }
+          if (allFailed) process.exit(2)
+          else if (!allSuccess) process.exit(1)
+          process.exit(0)
+        } catch (error: any) { console.log(''); console2.error(`批量执行失败: ${error.message}`); console.log(''); process.exit(1) }
         return
       }
 
-      // 单服务器执行模式
       const React = await import('react')
       const { render } = await import('ink')
       const { MultiStepCommandGenerator } = await import('../src/components/MultiStepCommandGenerator.js')
 
-      // 如果是远程模式，先获取远程上下文
       let remoteContext: {
         name: string
         sysInfo: Awaited<ReturnType<typeof collectRemoteSysInfo>>
@@ -1586,337 +1526,154 @@ program
       } | null = null
 
       if (remoteName) {
-        console.log('')
-        console2.info(`正在连接远程服务器 ${remoteName}...`)
-
+        console.log(''); console2.info(`正在连接远程服务器 ${remoteName}...`)
         try {
-          // 采集系统信息（使用缓存）
           const sysInfo = await collectRemoteSysInfo(remoteName)
-          if (options.debug) {
-            console2.muted(`系统: ${sysInfo.os} ${sysInfo.osVersion} (${sysInfo.shell})`)
-          }
-
-          // 获取远程 shell 历史
+          if (options.debug) console2.muted(`系统: ${sysInfo.os} ${sysInfo.osVersion} (${sysInfo.shell})`)
           const shellHistory = await fetchRemoteShellHistory(remoteName)
-          if (options.debug && shellHistory.length > 0) {
-            console2.muted(`Shell 历史: ${shellHistory.length} 条`)
-          }
-
+          if (options.debug && shellHistory.length > 0) console2.muted(`Shell 历史: ${shellHistory.length} 条`)
           remoteContext = { name: remoteName, sysInfo, shellHistory }
           console2.success(`已连接到 ${remoteName}`)
-        } catch (error: any) {
-          console2.error(`无法连接到 ${remoteName}: ${error.message}`)
-          console.log('')
-          process.exit(1)
-        }
+        } catch (error: any) { console2.error(`无法连接到 ${remoteName}: ${error.message}`); console.log(''); process.exit(1) }
       }
 
       const executedSteps: ExecutedStep[] = []
       let currentStepNumber = 1
-      let lastStepFailed = false // 跟踪上一步是否失败
+      let lastStepFailed = false
 
       while (true) {
         let stepResult: any = null
-
-        // 使用 Ink 渲染命令生成
         const { waitUntilExit, unmount } = render(
           React.createElement(MultiStepCommandGenerator, {
-            prompt,
-            debug: options.debug,
-            previousSteps: executedSteps,
-            currentStepNumber,
-            remoteContext: remoteContext ? {
-              name: remoteContext.name,
-              sysInfo: remoteContext.sysInfo,
-              shellHistory: remoteContext.shellHistory,
-            } : undefined,
-            isRemote: !!remoteName,  // 远程执行时不检测 builtin
-            onStepComplete: (res: any) => {
-              stepResult = res
-              unmount()
-            },
+            prompt, debug: options.debug, previousSteps: executedSteps, currentStepNumber,
+            remoteContext: remoteContext ? { name: remoteContext.name, sysInfo: remoteContext.sysInfo, shellHistory: remoteContext.shellHistory } : undefined,
+            isRemote: !!remoteName,
+            onStepComplete: (res: any) => { stepResult = res; unmount() },
           })
         )
-
         await waitUntilExit()
         await new Promise((resolve) => setTimeout(resolve, 10))
 
-        // 处理步骤结果
-        if (!stepResult || stepResult.cancelled) {
-          process.exit(0)
-        }
+        if (!stepResult || stepResult.cancelled) process.exit(0)
 
         if (stepResult.hasBuiltin) {
-          // 远程模式记录到远程历史
-          if (remoteName) {
-            addRemoteHistory(remoteName, {
-              userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${prompt}`,
-              command: stepResult.command,
-              aiGeneratedCommand: stepResult.aiGeneratedCommand,
-              userModified: stepResult.userModified || false,
-              executed: false,
-              exitCode: null,
-              output: '',
-              reason: 'builtin',
-            })
-          } else {
-            addHistory({
-              userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${prompt}`,
-              command: stepResult.command,
-              aiGeneratedCommand: stepResult.aiGeneratedCommand, // AI 原始命令
-              userModified: stepResult.userModified || false,
-              executed: false,
-              exitCode: null,
-              output: '',
-              reason: 'builtin',
-            })
-          }
+          if (remoteName) addRemoteHistory(remoteName, { userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${prompt}`, command: stepResult.command, aiGeneratedCommand: stepResult.aiGeneratedCommand, userModified: stepResult.userModified || false, executed: false, exitCode: null, output: '', reason: 'builtin' })
+          else addHistory({ userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${prompt}`, command: stepResult.command, aiGeneratedCommand: stepResult.aiGeneratedCommand, userModified: stepResult.userModified || false, executed: false, exitCode: null, output: '', reason: 'builtin' })
           process.exit(0)
         }
 
         if (stepResult.confirmed) {
-          // 如果命令为空，说明 AI 决定放弃
           if (!stepResult.command || stepResult.command.trim() === '') {
             console.log('')
-            if (stepResult.reasoning) {
-              console2.info(`💡 AI 分析: ${stepResult.reasoning}`)
-            }
+            if (stepResult.reasoning) console2.info(`💡 AI 分析: ${stepResult.reasoning}`)
             console2.muted('❌ AI 决定停止尝试，任务失败')
+            console.log(''); process.exit(1)
+          }
+          if (lastStepFailed && stepResult.needsContinue === false && stepResult.command.startsWith('echo')) {
             console.log('')
-            process.exit(1)
+            if (stepResult.reasoning) console2.info(`💡 AI 分析: ${stepResult.reasoning}`)
+            console2.muted('❌ AI 决定停止尝试，任务失败')
+            console.log(''); process.exit(1)
           }
 
-          // 特殊处理：如果上一步失败，且 AI 决定放弃（continue: false），直接显示原因并退出
-          if (
-            lastStepFailed &&
-            stepResult.needsContinue === false &&
-            stepResult.command.startsWith('echo')
-          ) {
-            console.log('')
-            if (stepResult.reasoning) {
-              console2.info(`💡 AI 分析: ${stepResult.reasoning}`)
-            }
-            console2.muted('❌ AI 决定停止尝试，任务失败')
-            console.log('')
-            process.exit(1)
-          }
-
-          // 执行命令（本地或远程）
           const execStart = Date.now()
-          let exitCode: number
-          let output: string
-          let stdout: string
-
+          let exitCode: number, output: string, stdout: string
           if (remoteName) {
-            // 远程执行
             const result = await executeRemoteCommand(remoteName, stepResult.command)
-            exitCode = result.exitCode
-            output = result.output
-            stdout = result.stdout
+            exitCode = result.exitCode; output = result.output; stdout = result.stdout
           } else {
-            // 本地执行
             const result = await executeCommand(stepResult.command)
-            exitCode = result.exitCode
-            output = result.output
-            stdout = result.stdout
+            exitCode = result.exitCode; output = result.output; stdout = result.stdout
           }
           const execDuration = Date.now() - execStart
-
-          // 判断命令是否成功
-          // 退出码 141 = 128 + 13 (SIGPIPE)，是管道正常关闭时的信号
-          // 例如：ps aux | head -3，head 读完 3 行就关闭管道，ps 收到 SIGPIPE
-          // 但如果退出码是 141 且没有 stdout 输出，说明可能是真正的错误
           const isSigpipeWithOutput = exitCode === 141 && stdout.trim().length > 0
           const isSuccess = exitCode === 0 || isSigpipeWithOutput
 
-          // 保存到执行历史
-          const executedStep: ExecutedStep = {
-            command: stepResult.command,
-            continue: stepResult.needsContinue || false,
-            reasoning: stepResult.reasoning,
-            nextStepHint: stepResult.nextStepHint,
-            exitCode,
-            output,
-          }
+          const executedStep: ExecutedStep = { command: stepResult.command, continue: stepResult.needsContinue || false, reasoning: stepResult.reasoning, nextStepHint: stepResult.nextStepHint, exitCode, output }
           executedSteps.push(executedStep)
 
-          // 记录到 pls 历史（远程模式记录到远程历史）
-          if (remoteName) {
-            addRemoteHistory(remoteName, {
-              userPrompt:
-                currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${stepResult.reasoning || prompt}`,
-              command: stepResult.command,
-              aiGeneratedCommand: stepResult.aiGeneratedCommand,
-              userModified: stepResult.userModified || false,
-              executed: true,
-              exitCode,
-              output,
-            })
-          } else {
-            addHistory({
-              userPrompt:
-                currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${stepResult.reasoning || prompt}`,
-              command: stepResult.command,
-              aiGeneratedCommand: stepResult.aiGeneratedCommand, // AI 原始命令
-              userModified: stepResult.userModified || false,
-              executed: true,
-              exitCode,
-              output,
-            })
-          }
+          if (remoteName) addRemoteHistory(remoteName, { userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${stepResult.reasoning || prompt}`, command: stepResult.command, aiGeneratedCommand: stepResult.aiGeneratedCommand, userModified: stepResult.userModified || false, executed: true, exitCode, output })
+          else addHistory({ userPrompt: currentStepNumber === 1 ? prompt : `[步骤${currentStepNumber}] ${stepResult.reasoning || prompt}`, command: stepResult.command, aiGeneratedCommand: stepResult.aiGeneratedCommand, userModified: stepResult.userModified || false, executed: true, exitCode, output })
 
-          // 显示结果
           console.log('')
           if (isSuccess) {
-            if (currentStepNumber === 1 && stepResult.needsContinue !== true) {
-              // 单步命令
-              console2.success(`执行完成 ${console2.formatDuration(execDuration)}`)
-            } else {
-              // 多步命令
-              console2.success(`步骤 ${currentStepNumber} 执行完成 ${console2.formatDuration(execDuration)}`)
-            }
+            if (currentStepNumber === 1 && stepResult.needsContinue !== true) console2.success(`执行完成 ${console2.formatDuration(execDuration)}`)
+            else console2.success(`步骤 ${currentStepNumber} 执行完成 ${console2.formatDuration(execDuration)}`)
             lastStepFailed = false
           } else {
-            // 执行失败，标记状态
-            console2.error(
-              `步骤 ${currentStepNumber} 执行失败，退出码: ${exitCode} ${console2.formatDuration(execDuration)}`
-            )
-            console.log('')
-            console2.warning('正在请 AI 分析错误并调整策略...')
-            lastStepFailed = true
-            // 继续循环，让 AI 分析错误
-            console.log('')
-            currentStepNumber++
-            continue
+            console2.error(`步骤 ${currentStepNumber} 执行失败，退出码: ${exitCode} ${console2.formatDuration(execDuration)}`)
+            console.log(''); console2.warning('正在请 AI 分析错误并调整策略...'); lastStepFailed = true
+            console.log(''); currentStepNumber++; continue
           }
-
-          // 判断是否继续
           if (stepResult.needsContinue !== true) {
-            if (currentStepNumber > 1) {
-              console.log('')
-              console2.success('✓ 所有步骤执行完成')
-            }
-            console.log('')
-            process.exit(0)
+            if (currentStepNumber > 1) console2.success('✓ 所有步骤执行完成')
+            console.log(''); process.exit(0)
           }
-
-          console.log('')
-          currentStepNumber++
+          console.log(''); currentStepNumber++
         } else if (!stepResult.confirmed && !stepResult.cancelled) {
-          // AI 返回了结果但没有确认（空命令的情况）
-          if (lastStepFailed && stepResult.reasoning) {
-            console.log('')
-            console2.info(`💡 AI 分析: ${stepResult.reasoning}`)
-            console2.muted('❌ AI 决定停止尝试，任务失败')
-            console.log('')
-            process.exit(1)
-          }
-          // 其他情况也退出
-          console.log('')
-          console2.muted('任务结束')
-          console.log('')
-          process.exit(0)
+          if (lastStepFailed && stepResult.reasoning) { console.log(''); console2.info(`💡 AI 分析: ${stepResult.reasoning}`); console2.muted('❌ AI 决定停止尝试，任务失败'); console.log(''); process.exit(1) }
+          console.log(''); console2.muted('任务结束'); console.log(''); process.exit(0)
         }
       }
     })()
   })
 
-/**
- * 执行远程命令
- * 如果设置了工作目录，自动添加 cd 前缀
- */
 async function executeRemoteCommand(
   remoteName: string,
   command: string
 ): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
   let stdout = ''
   let stderr = ''
-
-  // 如果有工作目录，自动添加 cd 前缀
   const workDir = getRemoteWorkDir(remoteName)
   const actualCommand = workDir ? `cd ${workDir} && ${command}` : command
-
-  console.log('') // 空行
-
-  // 计算命令框宽度，让分隔线长度一致（限制终端宽度）
+  console.log('')
   const termWidth = process.stdout.columns || 80
   const maxContentWidth = termWidth - 6
   const lines = command.split('\n')
   const wrappedLines: string[] = []
-  for (const line of lines) {
-    wrappedLines.push(...console2.wrapText(line, maxContentWidth))
-  }
-  const actualMaxWidth = Math.max(
-    ...wrappedLines.map((l) => console2.getDisplayWidth(l)),
-    console2.getDisplayWidth('生成命令')
-  )
+  for (const line of lines) { wrappedLines.push(...console2.wrapText(line, maxContentWidth)) }
+  const actualMaxWidth = Math.max(...wrappedLines.map((l) => console2.getDisplayWidth(l)), console2.getDisplayWidth('生成命令'))
   const boxWidth = Math.max(console2.MIN_COMMAND_BOX_WIDTH, Math.min(actualMaxWidth + 4, termWidth - 2))
   console2.printSeparator(`远程输出 (${remoteName})`, boxWidth)
-
   try {
     const result = await sshExec(remoteName, actualCommand, {
-      onStdout: (data) => {
-        stdout += data
-        process.stdout.write(data)
-      },
-      onStderr: (data) => {
-        stderr += data
-        process.stderr.write(data)
-      },
+      onStdout: (data) => { stdout += data; process.stdout.write(data) },
+      onStderr: (data) => { stderr += data; process.stderr.write(data) },
     })
-
-    if (stdout || stderr) {
-      console2.printSeparator('', boxWidth)
-    }
-
-    return {
-      exitCode: result.exitCode,
-      output: stdout + stderr,
-      stdout,
-      stderr,
-    }
+    if (stdout || stderr) console2.printSeparator('', boxWidth)
+    return { exitCode: result.exitCode, output: stdout + stderr, stdout, stderr }
   } catch (error: any) {
     console2.printSeparator('', boxWidth)
     console2.error(error.message)
-    return {
-      exitCode: 1,
-      output: error.message,
-      stdout: '',
-      stderr: error.message,
-    }
+    return { exitCode: 1, output: error.message, stdout: '', stderr: error.message }
   }
 }
 
-// 自定义帮助信息
-program.addHelpText(
-  'after',
-  `
+program.addHelpText('after', `
 ${chalk.bold('示例:')}
-  ${chalk.hex(getThemeColors().primary)('pls 安装 git')}                    让 AI 生成安装 git 的命令
-  ${chalk.hex(getThemeColors().primary)('pls 查找大于 100MB 的文件')}        查找大文件
-  ${chalk.hex(getThemeColors().primary)('pls 删除刚才创建的文件')}          AI 会参考历史记录
-  ${chalk.hex(getThemeColors().primary)('pls --debug 压缩 logs 目录')}      显示调试信息
-  ${chalk.hex(getThemeColors().primary)('pls chat tar 命令怎么用')}         AI 对话模式
-  ${chalk.hex(getThemeColors().primary)('pls chat clear')}                 清空对话历史
-  ${chalk.hex(getThemeColors().primary)('pls history')}                    查看 pls 命令历史
-  ${chalk.hex(getThemeColors().primary)('pls history clear')}              清空历史记录
-  ${chalk.hex(getThemeColors().primary)('pls alias')}                      查看命令别名
-  ${chalk.hex(getThemeColors().primary)('pls alias add disk "查看磁盘"')}   添加别名
-  ${chalk.hex(getThemeColors().primary)('pls disk')}                       使用别名（等同于 pls @disk）
-  ${chalk.hex(getThemeColors().primary)('pls hook')}                       查看 shell hook 状态
-  ${chalk.hex(getThemeColors().primary)('pls hook install')}               安装 shell hook（增强功能）
-  ${chalk.hex(getThemeColors().primary)('pls hook uninstall')}             卸载 shell hook
-  ${chalk.hex(getThemeColors().primary)('pls upgrade')}                    升级到最新版本
-  ${chalk.hex(getThemeColors().primary)('pls config')}                     交互式配置
-  ${chalk.hex(getThemeColors().primary)('pls config list')}                查看当前配置
+  ${chalk.hex(getThemeColors().primary)('ai 安装 git')}                    让 AI 生成安装 git 的命令
+  ${chalk.hex(getThemeColors().primary)('ai 查找大于 100MB 的文件')}        查找大文件
+  ${chalk.hex(getThemeColors().primary)('ai 删除刚才创建的文件')}          AI 会参考历史记录
+  ${chalk.hex(getThemeColors().primary)('ai --debug 压缩 logs 目录')}      显示调试信息
+  ${chalk.hex(getThemeColors().primary)('ai chat tar 命令怎么用')}         AI 对话模式
+  ${chalk.hex(getThemeColors().primary)('ai history')}                    查看 ai 命令历史
+  ${chalk.hex(getThemeColors().primary)('ai history clear')}              清空历史记录
+  ${chalk.hex(getThemeColors().primary)('ai alias')}                      查看命令别名
+  ${chalk.hex(getThemeColors().primary)('ai alias add disk "查看磁盘"')}   添加别名
+  ${chalk.hex(getThemeColors().primary)('ai disk')}                       使用别名（等同于 ai @disk）
+  ${chalk.hex(getThemeColors().primary)('ai hook')}                       查看 shell hook 状态
+  ${chalk.hex(getThemeColors().primary)('ai hook install')}               安装 shell hook（增强功能）
+  ${chalk.hex(getThemeColors().primary)('ai hook uninstall')}             卸载 shell hook
+  ${chalk.hex(getThemeColors().primary)('ai upgrade')}                    升级到最新版本
+  ${chalk.hex(getThemeColors().primary)('ai config')}                     交互式配置
+  ${chalk.hex(getThemeColors().primary)('ai config list')}                查看当前配置
 
 ${chalk.bold('远程执行:')}
-  ${chalk.hex(getThemeColors().primary)('pls remote')}                     查看远程服务器列表
-  ${chalk.hex(getThemeColors().primary)('pls remote add myserver root@1.2.3.4')}  添加服务器
-  ${chalk.hex(getThemeColors().primary)('pls remote test myserver')}       测试连接
-  ${chalk.hex(getThemeColors().primary)('pls -r myserver 查看磁盘')}       在远程服务器执行
-  ${chalk.hex(getThemeColors().primary)('pls remote hook install myserver')}  安装远程 Shell Hook
-`
-)
+  ${chalk.hex(getThemeColors().primary)('ai remote')}                     查看远程服务器列表
+  ${chalk.hex(getThemeColors().primary)('ai remote add myserver root@1.2.3.4')}  添加服务器
+  ${chalk.hex(getThemeColors().primary)('ai remote test myserver')}       测试连接
+  ${chalk.hex(getThemeColors().primary)('ai -r myserver 查看磁盘')}       在远程服务器执行
+  ${chalk.hex(getThemeColors().primary)('ai remote hook install myserver')}  安装远程 Shell Hook
+`)
 
 program.parse()
