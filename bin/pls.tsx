@@ -100,6 +100,8 @@ const __dirname = dirname(__filename)
 
 const program = new Command()
 
+// Banner 显示控制：防止重复打印
+let bannerShown = false
 
 // 启动时异步检查更新（不阻塞主流程）
 let updateCheckResult: { hasUpdate: boolean; latestVersion: string | null } | null = null
@@ -1886,6 +1888,18 @@ async function executeRemoteCommand(
     }
   }
 }
+
+// 在 action 执行前显示 Banner
+program.hook('preAction', () => {
+  if (bannerShown) return
+  if (process.env.AI_NO_BANNER === '1' || process.env.AI_NO_BANNER === 'true') return
+
+  bannerShown = true
+  console.log('')
+  console.log(chalk.bold.cyan('🤖 马哥教育 AI 学习助手  ') + chalk.yellow(`v${packageJson.version}`))
+  console.log(chalk.dim('⚡ 让命令更智能，让学习更高效'))
+  console.log('')
+})
 
 // 自定义帮助信息
 program.addHelpText(
