@@ -213,11 +213,18 @@ describe('PreHook 返回 DENY', () => {
       reason: '禁止执行危险命令',
     }))
 
-    await expect(pipeline.execute({
-      command: 'rm -rf /',
-      sessionId: 'test-session-4',
-      isDryRun: false,
-    })).rejects.toThrow(ExecutionBlockedError)
+    let err: any
+    try {
+      await pipeline.execute({
+        command: 'rm -rf /',
+        sessionId: 'test-session-4',
+        isDryRun: false,
+      })
+      expect.unreachable('应该抛出错误')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toHaveProperty('name', 'ExecutionBlockedError')
 
     // 验证 spawn 没有被调用
     expect(mockSpawn).not.toHaveBeenCalled()
@@ -241,7 +248,7 @@ describe('PreHook 返回 DENY', () => {
       })
       expect.unreachable('应该抛出错误')
     } catch (err: any) {
-      expect(err).toBeInstanceOf(ExecutionBlockedError)
+      expect(err).toHaveProperty('name', 'ExecutionBlockedError')
       expect(err.message).toContain('该命令被安全策略禁止')
       expect(err.command).toBe('rm -rf /')
       expect(err.metadata?.rule).toBe('no-rm-rf')
@@ -349,11 +356,18 @@ describe('PreHook 返回 ASK', () => {
       reason: '该操作有风险',
     }))
 
-    await expect(pipeline.execute({
-      command: 'rm -rf /',
-      sessionId: 'test-session-9',
-      isDryRun: false,
-    })).rejects.toThrow(ExecutionBlockedError)
+    let err: any
+    try {
+      await pipeline.execute({
+        command: 'rm -rf /',
+        sessionId: 'test-session-9',
+        isDryRun: false,
+      })
+      expect.unreachable('应该抛出错误')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toHaveProperty('name', 'ExecutionBlockedError')
 
     // 用户拒绝后不应执行命令
     expect(mockSpawn).not.toHaveBeenCalled()
@@ -384,11 +398,18 @@ describe('多个 PreHook 顺序执行', () => {
       return { action: 'ALLOW' as const }
     })
 
-    await expect(pipeline.execute({
-      command: 'test',
-      sessionId: 'test-session-10',
-      isDryRun: false,
-    })).rejects.toThrow(ExecutionBlockedError)
+    let err: any
+    try {
+      await pipeline.execute({
+        command: 'test',
+        sessionId: 'test-session-10',
+        isDryRun: false,
+      })
+      expect.unreachable('应该抛出错误')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toHaveProperty('name', 'ExecutionBlockedError')
 
     expect(executionOrder).toEqual([1, 2])
     expect(mockSpawn).not.toHaveBeenCalled()
@@ -513,7 +534,14 @@ describe('超时机制', () => {
     })
 
     // 等待超时
-    await expect(resultPromise).rejects.toThrow(ExecutionTimeoutError)
+    let err: any
+    try {
+      await resultPromise
+      expect.unreachable('应该抛出超时错误')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toHaveProperty('name', 'ExecutionTimeoutError')
 
     // 验证 kill 被调用
     expect(mockChild.kill).toHaveBeenCalledWith('SIGTERM')
@@ -609,11 +637,18 @@ describe('钩子超时', () => {
     })
 
     // 钩子超时默认 5 秒
-    await expect(pipeline.execute({
-      command: 'test',
-      sessionId: 'test-session-19',
-      isDryRun: false,
-    })).rejects.toThrow(HookFailureError)
+    let err: any
+    try {
+      await pipeline.execute({
+        command: 'test',
+        sessionId: 'test-session-19',
+        isDryRun: false,
+      })
+      expect.unreachable('应该抛出钩子失败错误')
+    } catch (e) {
+      err = e
+    }
+    expect(err).toHaveProperty('name', 'HookFailureError')
   }, 7000) // 测试本身超时 7 秒
 })
 
