@@ -106,7 +106,7 @@ export async function generateMultiStepCommand(
     },
   })
 
-  const stepData = response.object as CommandStep
+  const stepData = response.object as unknown as CommandStep
 
   // 返回调试信息
   if (options.debug) {

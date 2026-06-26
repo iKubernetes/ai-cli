@@ -90,6 +90,7 @@ export interface Config {
   remotes: Record<string, RemoteConfig>  // 远程服务器配置
   defaultRemote?: string                  // 默认远程服务器名称
   systemCacheExpireDays?: number          // 系统信息缓存过期天数（默认 7 天）
+  experimental?: Record<string, boolean>  // Feature Flag 配置
 }
 
 /**
@@ -145,8 +146,15 @@ export function getConfig(): Config {
       const content = fs.readFileSync(CONFIG_FILE, 'utf-8')
       config = { ...DEFAULT_CONFIG, ...JSON.parse(content) }
     } catch {
+      // 配置文件损坏时，重置为默认配置并警告用户
+      console.warn(chalk.hex(getColors().warning)('⚠️  配置文件损坏，已重置为默认配置'))
       config = { ...DEFAULT_CONFIG }
     }
+  }
+
+  // 确保 experimental 字段存在
+  if (!config.experimental) {
+    config.experimental = {}
   }
 
   cachedConfig = config
@@ -154,11 +162,14 @@ export function getConfig(): Config {
 }
 
 /**
- * 保存配置
+ * 保存配置（使用原子写入：先写临时文件再 rename）
  */
 export function saveConfig(config: Config): void {
   ensureConfigDir()
-  fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2))
+  const content = JSON.stringify(config, null, 2)
+  const tmpFile = CONFIG_FILE + '.tmp.' + process.pid
+  fs.writeFileSync(tmpFile, content, 'utf-8')
+  fs.renameSync(tmpFile, CONFIG_FILE)
 }
 
 /**
@@ -424,4 +435,28 @@ export async function runConfigWizard(): Promise<void> {
   } finally {
     rl.close()
   }
+}
+
+/**
+ * 检查 experimental feature flag 是否启用
+ * 若 key 不存在或为 false 返回 false；若 key 存在且为 true 返回 true
+ */
+export function isExperimentalEnabled(key: string): boolean {
+  const config = getConfig()
+  return config.experimental?.[key] === true
+}
+
+/**
+ * 更新配置文件中的 experimental field
+ * 使用原子写入（先写临时文件再 rename）确保写入安全
+ */
+export async function setExperimental(key: string, value: boolean): Promise<void> {
+  const config = getConfig()
+  if (!config.experimental) {
+    config.experimental = {}
+  }
+  config.experimental[key] = value
+  saveConfig(config)
+  // 清除缓存，下次读取时会重新加载
+  cachedConfig = null
 }

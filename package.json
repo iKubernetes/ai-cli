@@ -1,6 +1,6 @@
 {
   "name": "@ikubernetes/ai-cli",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "马哥教育AI学习助手 — 将自然语言转换为可执行的 Shell 命令",
   "type": "module",
   "bin": {
