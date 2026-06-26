@@ -101,10 +101,10 @@ describe('getDefaultShell', () => {
 })
 
 describe('getConfigDir', () => {
-  it('应该返回 ~/.please 目录', () => {
+  it('应该返回 ~/.ai-cli 目录', () => {
     const configDir = getConfigDir()
-    expect(configDir).toContain('.please')
-    expect(configDir).toMatch(/[\/\\]\.please$/)
+    expect(configDir).toContain('.ai-cli')
+    expect(configDir).toMatch(/[\/\\]\.ai-cli$/)
   })
 
   it('应该使用用户 home 目录', () => {
@@ -119,7 +119,7 @@ describe('getConfigDir', () => {
 describe('getPowerShellConfigDir', () => {
   it('应该返回 PowerShell 变量格式', () => {
     const psDir = getPowerShellConfigDir()
-    expect(psDir).toBe('$env:USERPROFILE\\.please')
+    expect(psDir).toBe('$env:USERPROFILE\\.ai-cli')
   })
 
   it('返回值应该是 PowerShell 可识别的路径', () => {

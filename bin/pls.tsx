@@ -471,7 +471,7 @@ themeCmd
       }
 
       // 创建主题目录
-      const themesDir = path.join(os.homedir(), '.please', 'themes')
+      const themesDir = path.join(os.homedir(), '.ai-cli', 'themes')
       if (!fs.existsSync(themesDir)) {
         fs.mkdirSync(themesDir, { recursive: true })
       }

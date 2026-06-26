@@ -3,7 +3,7 @@ import path from 'path'
 import os from 'os'
 
 // 主题目录路径
-const THEMES_DIR = path.join(os.homedir(), '.please', 'themes')
+const THEMES_DIR = path.join(os.homedir(), '.ai-cli', 'themes')
 
 // 主题类型定义（改为 string 支持动态主题）
 export type ThemeName = string
@@ -334,7 +334,7 @@ export const themes: Record<ThemeName, Theme> = Object.fromEntries(
 export function getCurrentTheme(): Theme {
   // 直接读取配置文件，避免循环依赖
   try {
-    const configPath = path.join(os.homedir(), '.please', 'config.json')
+    const configPath = path.join(os.homedir(), '.ai-cli', 'config.json')
     if (fs.existsSync(configPath)) {
       const content = fs.readFileSync(configPath, 'utf-8')
       const config = JSON.parse(content)

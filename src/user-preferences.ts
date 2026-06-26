@@ -2,7 +2,7 @@
  * 用户命令偏好统计模块
  *
  * 功能：
- * - 读取和分析 ~/.please/command_stats.txt
+ * - 读取和分析 ~/.ai-cli/command_stats.txt
  * - 获取用户最常用的命令
  * - 格式化为 AI 可理解的字符串
  * - 智能过滤非偏好命令（Shell 内置、系统通用命令等）

@@ -13,7 +13,7 @@ function getColors() {
   }
 }
 
-const CONFIG_DIR = path.join(os.homedir(), '.please')
+const CONFIG_DIR = path.join(os.homedir(), '.ai-cli')
 const CHAT_HISTORY_FILE = path.join(CONFIG_DIR, 'chat_history.json')
 
 /**

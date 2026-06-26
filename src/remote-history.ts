@@ -209,7 +209,7 @@ function getRemoteShellHistoryPath(name: string): string {
 
 /**
  * 从远程服务器读取 shell 历史
- * 读取远程 ~/.please/shell_history.jsonl
+ * 读取远程 ~/.ai-cli/shell_history.jsonl
  */
 export async function fetchRemoteShellHistory(name: string): Promise<RemoteShellHistoryItem[]> {
   const config = getConfig()
@@ -217,7 +217,7 @@ export async function fetchRemoteShellHistory(name: string): Promise<RemoteShell
 
   try {
     // 读取远程 shell 历史文件
-    const result = await sshExec(name, `tail -n ${limit} ~/.please/shell_history.jsonl 2>/dev/null || echo ""`, {
+    const result = await sshExec(name, `tail -n ${limit} ~/.ai-cli/shell_history.jsonl 2>/dev/null || echo ""`, {
       timeout: 10000,
     })
 
@@ -344,7 +344,7 @@ export async function displayRemoteShellHistory(name: string): Promise<void> {
     })
 
     console.log(chalk.gray('━'.repeat(50)))
-    console.log(chalk.gray(`远程文件: ~/.please/shell_history.jsonl`))
+    console.log(chalk.gray(`远程文件: ~/.ai-cli/shell_history.jsonl`))
     console.log('')
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
@@ -370,7 +370,7 @@ export async function clearRemoteShellHistory(name: string): Promise<void> {
 
   try {
     // 清空远程文件
-    await sshExec(name, 'rm -f ~/.please/shell_history.jsonl', { timeout: 10000 })
+    await sshExec(name, 'rm -f ~/.ai-cli/shell_history.jsonl', { timeout: 10000 })
 
     // 清空本地缓存
     const cachePath = getRemoteShellHistoryPath(name)
