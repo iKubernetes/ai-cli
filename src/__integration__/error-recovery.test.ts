@@ -52,7 +52,7 @@ const mockConfig = {
 vi.mock('../config.js', () => ({
   getConfig: vi.fn(() => mockConfig),
   saveConfig: vi.fn(),
-  CONFIG_DIR: '/home/testuser/.please',
+  CONFIG_DIR: '/home/testuser/.ai-cli',
 }))
 
 // Mock remote 模块

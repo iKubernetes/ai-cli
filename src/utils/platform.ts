@@ -409,10 +409,10 @@ export function getDefaultShell(): string {
 
 /**
  * 获取 pls 配置目录
- * 统一使用 ~/.please
+ * 统一使用 ~/.ai-cli
  */
 export function getConfigDir(): string {
-  return path.join(os.homedir(), '.please')
+  return path.join(os.homedir(), '.ai-cli')
 }
 
 /**
@@ -427,5 +427,5 @@ export function normalizePath(p: string): string {
  * 使用 $env:USERPROFILE 而不是硬编码路径
  */
 export function getPowerShellConfigDir(): string {
-  return '$env:USERPROFILE\\.please'
+  return '$env:USERPROFILE\\.ai-cli'
 }

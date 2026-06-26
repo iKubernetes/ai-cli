@@ -124,7 +124,7 @@ describe('getChatHistory', () => {
     getChatHistory()
 
     expect(mockFs.mkdirSync).toHaveBeenCalledWith(
-      expect.stringContaining('.please'),
+      expect.stringContaining('.ai-cli'),
       { recursive: true }
     )
   })
@@ -264,7 +264,7 @@ describe('getChatHistoryFilePath', () => {
     const { getChatHistoryFilePath } = await resetChatHistoryModule()
     const filePath = getChatHistoryFilePath()
 
-    expect(filePath).toContain('.please')
+    expect(filePath).toContain('.ai-cli')
     expect(filePath).toContain('chat_history.json')
   })
 })

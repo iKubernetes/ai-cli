@@ -158,10 +158,10 @@ function parsePowerShellHistoryLine(line: string): ShellHistoryItem | null {
 export function getLastCommandFromSystem(): ShellHistoryItem | null {
   const history = getSystemShellHistory()
 
-  // 从后往前找第一条非 pls 命令
+  // 从后往前找第一条非 pls/ai 命令
   for (let i = history.length - 1; i >= 0; i--) {
     const item = history[i]
-    if (!item.cmd.startsWith('pls') && !item.cmd.startsWith('please')) {
+    if (!item.cmd.startsWith('pls') && !item.cmd.startsWith('ai ') && !item.cmd.startsWith('please')) {
       return item
     }
   }

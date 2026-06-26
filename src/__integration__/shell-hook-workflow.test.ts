@@ -55,7 +55,7 @@ const mockConfig = {
 vi.mock('../config.js', () => ({
   getConfig: vi.fn(() => mockConfig),
   saveConfig: vi.fn(),
-  CONFIG_DIR: '/home/testuser/.please',
+  CONFIG_DIR: '/home/testuser/.ai-cli',
 }))
 
 // Mock theme 模块
@@ -113,7 +113,7 @@ const ZSHRC_WITH_HOOK = `# User configuration
 export PATH="/usr/local/bin:$PATH"
 alias ll="ls -la"
 
-# >>> pretty-please shell hook >>>
+# >>> ai-cli shell hook >>>
 # 此代码块由 pls 自动生成，请勿手动修改
 autoload -Uz add-zsh-hook
 _pls_preexec() {
@@ -126,7 +126,7 @@ _pls_precmd() {
 }
 add-zsh-hook preexec _pls_preexec
 add-zsh-hook precmd _pls_precmd
-# <<< pretty-please shell hook <<<
+# <<< ai-cli shell hook <<<
 `
 
 // 模拟 Shell 历史记录（JSONL 格式）
@@ -170,7 +170,7 @@ describe('Shell Hook 完整安装流程', () => {
     mockConfig.shellHook = false
     mockFs.existsSync.mockImplementation((path: any) => {
       if (path.includes('.zshrc')) return true
-      if (path.includes('.please')) return true
+      if (path.includes('.ai-cli')) return true
       if (path.includes('shell_history')) return false
       return false
     })
@@ -330,10 +330,10 @@ describe('Shell 历史 AI 格式化', () => {
 })
 
 // ============================================================================
-// pls 命令历史与 Shell 历史关联测试
+// ai 命令历史与 Shell 历史关联测试
 // ============================================================================
 
-describe('pls 命令历史与 Shell 历史关联', () => {
+describe('ai 命令历史与 Shell 历史关联', () => {
   it('addHistory 应该记录用户修改标记', async () => {
     mockFs.existsSync.mockReturnValue(true)
     mockFs.readFileSync.mockReturnValue(JSON.stringify([]))

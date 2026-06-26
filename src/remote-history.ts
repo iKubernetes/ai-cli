@@ -145,7 +145,7 @@ export function formatRemoteHistoryForAI(name: string): string {
     }
   })
 
-  return `【该服务器最近通过 pls 执行的命令】\n${lines.join('\n')}`
+  return `【该服务器最近通过 ai 执行的命令】\n${lines.join('\n')}`
 }
 
 /**
@@ -328,7 +328,7 @@ export async function displayRemoteShellHistory(name: string): Promise<void> {
     if (history.length === 0) {
       console.log('')
       console.log(chalk.gray(`  服务器 "${name}" 暂无 shell 历史`))
-      console.log(chalk.gray('  请先安装远程 hook: pls remote hook install ' + name))
+      console.log(chalk.gray('  请先安装远程 hook: ai remote hook install ' + name))
       console.log('')
       return
     }

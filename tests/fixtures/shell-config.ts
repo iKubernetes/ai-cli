@@ -3,8 +3,8 @@
  */
 
 // Zsh Hook 脚本标记
-export const ZSH_HOOK_START_MARKER = '# >>> pretty-please shell hook >>>'
-export const ZSH_HOOK_END_MARKER = '# <<< pretty-please shell hook <<<'
+export const ZSH_HOOK_START_MARKER = '# >>> ai-cli shell hook >>>'
+export const ZSH_HOOK_END_MARKER = '# <<< ai-cli shell hook <<<'
 
 // 完整的 Zsh 配置文件（带 Hook）
 export const zshrcWithHook = `\
@@ -26,7 +26,7 @@ precmd() {
     if [[ -n "$__pls_command" ]]; then
         local cmd_escaped=\${__pls_command//\\\\/\\\\\\\\}
         local json="{\\"cmd\\":\\"$cmd_escaped\\",\\"exit\\":$exit_code,\\"time\\":\\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\\"}"
-        echo "$json" >> ~/.please/shell_history.jsonl
+        echo "$json" >> ~/.ai-cli/shell_history.jsonl
     fi
     __pls_command=""
 }
@@ -61,7 +61,7 @@ __pls_capture_command() {
 
     if [[ "$last_cmd" != "$__pls_last_cmd" && -n "$last_cmd" ]]; then
         local json="{\\"cmd\\":\\"$last_cmd\\",\\"exit\\":$exit_code,\\"time\\":\\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\\"}"
-        echo "$json" >> ~/.please/shell_history.jsonl
+        echo "$json" >> ~/.ai-cli/shell_history.jsonl
         __pls_last_cmd="$last_cmd"
     fi
 }
@@ -79,7 +79,7 @@ export const powerShellProfileWithHook = `\
 
 ${ZSH_HOOK_START_MARKER}
 # Pretty Please Shell Hook
-\$Global:__PlsDir = Join-Path \$env:USERPROFILE ".please"
+\$Global:__PlsDir = Join-Path \$env:USERPROFILE ".ai-cli"
 \$Global:__PlsHistoryFile = Join-Path \$Global:__PlsDir "shell_history.jsonl"
 
 if (-not (Test-Path \$Global:__PlsDir)) {

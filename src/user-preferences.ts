@@ -55,8 +55,8 @@ const COMMAND_BLACKLIST = new Set([
   // 权限命令
   'sudo', 'doas', 'su',
 
-  // pls 自身
-  'pls', 'pls-dev', 'please',
+  // ai/pls 自身
+  'pls', 'pls-dev', 'please', 'ai',
 ])
 
 /**

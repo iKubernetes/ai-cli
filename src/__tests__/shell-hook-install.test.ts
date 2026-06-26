@@ -38,7 +38,7 @@ vi.mock('../config.js', () => ({
     ;(mockConfig as any)[key] = value
     return mockConfig
   }),
-  CONFIG_DIR: '/home/testuser/.please',
+  CONFIG_DIR: '/home/testuser/.ai-cli',
 }))
 
 // Mock theme 模块
@@ -75,14 +75,14 @@ const mockSetConfigValue = vi.mocked(setConfigValue)
 const mockPlatformDetectShell = vi.mocked(platformDetectShell)
 
 // Hook 标记
-const HOOK_START_MARKER = '# >>> pretty-please shell hook >>>'
-const HOOK_END_MARKER = '# <<< pretty-please shell hook <<<'
+const HOOK_START_MARKER = '# >>> ai-cli shell hook >>>'
+const HOOK_END_MARKER = '# <<< ai-cli shell hook <<<'
 
 // 跨平台路径辅助函数
 const HOME = '/home/testuser'
 const ZSHRC_PATH = path.join(HOME, '.zshrc')
 const ZSHRC_BACKUP_PATH = path.join(HOME, '.zshrc.pls-backup')
-const CONFIG_PATH = path.join(HOME, '.please')
+const CONFIG_PATH = path.join(HOME, '.ai-cli')
 
 // 模拟的 shell 配置文件内容
 const EMPTY_ZSHRC = '# My zshrc\nexport PATH=$PATH:/usr/local/bin\n'
@@ -138,7 +138,7 @@ describe('installShellHook', () => {
     mockFs.existsSync.mockImplementation((p: any) => {
       const pathStr = p.toString()
       if (pathStr.includes('.zshrc') && !pathStr.includes('backup')) return true
-      if (pathStr.includes('.please')) return true
+      if (pathStr.includes('.ai-cli')) return true
       return false
     })
     mockFs.readFileSync.mockReturnValue(EMPTY_ZSHRC)
@@ -188,7 +188,7 @@ describe('installShellHook', () => {
   it('配置目录不存在时应该创建', async () => {
     mockFs.existsSync.mockImplementation((path: any) => {
       if (path === '/home/testuser/.zshrc') return true
-      if (path === '/home/testuser/.please') return false
+      if (path === '/home/testuser/.ai-cli') return false
       return false
     })
     mockFs.readFileSync.mockReturnValue(EMPTY_ZSHRC)
@@ -196,7 +196,7 @@ describe('installShellHook', () => {
     const { installShellHook } = await resetShellHookModule()
     await installShellHook()
 
-    expect(mockFs.mkdirSync).toHaveBeenCalledWith('/home/testuser/.please', {
+    expect(mockFs.mkdirSync).toHaveBeenCalledWith('/home/testuser/.ai-cli', {
       recursive: true,
     })
   })
@@ -204,7 +204,7 @@ describe('installShellHook', () => {
   it('配置文件不存在时不应该备份', async () => {
     mockFs.existsSync.mockImplementation((path: any) => {
       if (path === '/home/testuser/.zshrc') return false
-      if (path === '/home/testuser/.please') return true
+      if (path === '/home/testuser/.ai-cli') return true
       return false
     })
 

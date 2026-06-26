@@ -37,7 +37,7 @@ vi.mock('../config.js', () => ({
   getConfig: vi.fn(() => ({
     systemCacheExpireDays: 7,
   })),
-  CONFIG_DIR: '/home/user/.please',
+  CONFIG_DIR: '/home/user/.ai-cli',
 }))
 
 // Mock platform 模块

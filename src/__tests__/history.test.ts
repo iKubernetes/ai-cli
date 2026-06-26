@@ -117,7 +117,7 @@ describe('getHistory', () => {
     getHistory()
 
     expect(mockFs.mkdirSync).toHaveBeenCalledWith(
-      expect.stringContaining('.please'),
+      expect.stringContaining('.ai-cli'),
       { recursive: true }
     )
   })
@@ -455,7 +455,7 @@ describe('formatHistoryForAI', () => {
     const { formatHistoryForAI } = await resetHistoryModule()
     const formatted = formatHistoryForAI()
 
-    expect(formatted).toContain('最近通过 pls 执行的命令')
+    expect(formatted).toContain('最近通过 ai 执行的命令')
   })
 
   it('失败命令应该附加输出摘要', async () => {
@@ -490,7 +490,7 @@ describe('getHistoryFilePath', () => {
     const { getHistoryFilePath } = await resetHistoryModule()
     const path = getHistoryFilePath()
 
-    expect(path).toContain('.please')
+    expect(path).toContain('.ai-cli')
     expect(path).toContain('history.json')
   })
 })

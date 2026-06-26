@@ -215,7 +215,7 @@ describe('checkRemoteHookInstalled', () => {
     await checkRemoteHookInstalled(mockSshExec, '~/.zshrc')
 
     expect(mockSshExec).toHaveBeenCalledWith(
-      expect.stringContaining('pretty-please shell hook')
+      expect.stringContaining('ai-cli shell hook')
     )
   })
 })
@@ -319,7 +319,7 @@ describe('installRemoteShellHook', () => {
     expect(result.success).toBe(true)
   })
 
-  it('应该创建 ~/.please 目录', async () => {
+  it('应该创建 ~/.ai-cli 目录', async () => {
     const mockSshExec = vi.fn()
       .mockResolvedValueOnce({ stdout: 'not_installed\n', exitCode: 0 })
       .mockResolvedValueOnce({ stdout: '', exitCode: 0 })
@@ -328,7 +328,7 @@ describe('installRemoteShellHook', () => {
 
     await installRemoteShellHook(mockSshExec, 'zsh')
 
-    expect(mockSshExec).toHaveBeenCalledWith('mkdir -p ~/.please')
+    expect(mockSshExec).toHaveBeenCalledWith('mkdir -p ~/.ai-cli')
   })
 
   it('应该备份原配置文件', async () => {
@@ -417,7 +417,7 @@ describe('uninstallRemoteShellHook', () => {
     // 验证第二次调用包含 sed 命令
     const sedCall = mockSshExec.mock.calls[1][0]
     expect(sedCall).toContain('sed')
-    expect(sedCall).toContain('pretty-please shell hook')
+    expect(sedCall).toContain('ai-cli shell hook')
   })
 
   it('应该处理正确的配置文件路径', async () => {
@@ -541,28 +541,28 @@ describe('generateRemoteHookScript', () => {
   it('zsh 脚本应该包含 Hook 标记', () => {
     const script = generateRemoteHookScript('zsh')
 
-    expect(script).toContain('>>> pretty-please shell hook >>>')
-    expect(script).toContain('<<< pretty-please shell hook <<<')
+    expect(script).toContain('>>> ai-cli shell hook >>>')
+    expect(script).toContain('<<< ai-cli shell hook <<<')
   })
 
   it('bash 脚本应该包含 Hook 标记', () => {
     const script = generateRemoteHookScript('bash')
 
-    expect(script).toContain('>>> pretty-please shell hook >>>')
-    expect(script).toContain('<<< pretty-please shell hook <<<')
+    expect(script).toContain('>>> ai-cli shell hook >>>')
+    expect(script).toContain('<<< ai-cli shell hook <<<')
   })
 
-  it('zsh 脚本应该使用 ~/.please 目录', () => {
+  it('zsh 脚本应该使用 ~/.ai-cli 目录', () => {
     const script = generateRemoteHookScript('zsh')
 
-    expect(script).toContain('~/.please')
+    expect(script).toContain('~/.ai-cli')
     expect(script).toContain('shell_history.jsonl')
   })
 
-  it('bash 脚本应该使用 ~/.please 目录', () => {
+  it('bash 脚本应该使用 ~/.ai-cli 目录', () => {
     const script = generateRemoteHookScript('bash')
 
-    expect(script).toContain('~/.please')
+    expect(script).toContain('~/.ai-cli')
     expect(script).toContain('shell_history.jsonl')
   })
 

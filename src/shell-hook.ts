@@ -147,7 +147,7 @@ function generateZshHook(): string {
 
   return `
 ${HOOK_START_MARKER}
-# 记录命令到 pretty-please 历史
+# 记录命令到 ai-cli 历史
 ${generateStatFunction()}
 __pls_preexec() {
   __PLS_LAST_CMD="$1"
@@ -189,7 +189,7 @@ function generateBashHook(): string {
 
   return `
 ${HOOK_START_MARKER}
-# 记录命令到 pretty-please 历史
+# 记录命令到 ai-cli 历史
 ${generateStatFunction()}
 __pls_prompt_command() {
   local exit_code=$?
@@ -225,9 +225,9 @@ function generatePowerShellHook(): string {
   // 使用 PowerShell 原生路径变量，而不是嵌入 Node.js 路径
   return `
 ${HOOK_START_MARKER}
-# 记录命令到 pretty-please 历史
+# 记录命令到 ai-cli 历史
 # 使用 PowerShell 原生路径
-$Global:__PlsDir = Join-Path $env:USERPROFILE ".please"
+$Global:__PlsDir = Join-Path $env:USERPROFILE ".ai-cli"
 $Global:__PlsHistoryFile = Join-Path $Global:__PlsDir "shell_history.jsonl"
 $Global:__PlsStatsFile = Join-Path $Global:__PlsDir "command_stats.txt"
 $Global:__PlsLastCmd = ""
@@ -806,7 +806,7 @@ function generateRemoteZshHook(): string {
 
   return `
 ${HOOK_START_MARKER}
-# 记录命令到 pretty-please 历史
+# 记录命令到 ai-cli 历史
 __pls_preexec() {
   __PLS_LAST_CMD="$1"
   __PLS_CMD_START=$(date +%s)
@@ -818,12 +818,12 @@ __pls_precmd() {
     local end_time=$(date +%s)
     local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     # 确保目录存在
-    mkdir -p ~/.please
+    mkdir -p ~/.ai-cli
     # 转义命令中的特殊字符
     local escaped_cmd=$(echo "$__PLS_LAST_CMD" | sed 's/\\\\/\\\\\\\\/g; s/"/\\\\"/g')
-    echo "{\\"cmd\\":\\"$escaped_cmd\\",\\"exit\\":$exit_code,\\"time\\":\\"$timestamp\\"}" >> ~/.please/shell_history.jsonl
+    echo "{\\"cmd\\":\\"$escaped_cmd\\",\\"exit\\":$exit_code,\\"time\\":\\"$timestamp\\"}" >> ~/.ai-cli/shell_history.jsonl
     # 保持文件不超过 ${limit} 行（从配置读取）
-    tail -n ${limit} ~/.please/shell_history.jsonl > ~/.please/shell_history.jsonl.tmp && mv ~/.please/shell_history.jsonl.tmp ~/.please/shell_history.jsonl
+    tail -n ${limit} ~/.ai-cli/shell_history.jsonl > ~/.ai-cli/shell_history.jsonl.tmp && mv ~/.ai-cli/shell_history.jsonl.tmp ~/.ai-cli/shell_history.jsonl
     unset __PLS_LAST_CMD
   fi
 }
@@ -844,7 +844,7 @@ function generateRemoteBashHook(): string {
 
   return `
 ${HOOK_START_MARKER}
-# 记录命令到 pretty-please 历史
+# 记录命令到 ai-cli 历史
 __pls_prompt_command() {
   local exit_code=$?
   local last_cmd=$(history 1 | sed 's/^ *[0-9]* *//')
@@ -852,10 +852,10 @@ __pls_prompt_command() {
     __PLS_LAST_CMD="$last_cmd"
     local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     # 确保目录存在
-    mkdir -p ~/.please
+    mkdir -p ~/.ai-cli
     local escaped_cmd=$(echo "$last_cmd" | sed 's/\\\\/\\\\\\\\/g; s/"/\\\\"/g')
-    echo "{\\"cmd\\":\\"$escaped_cmd\\",\\"exit\\":$exit_code,\\"time\\":\\"$timestamp\\"}" >> ~/.please/shell_history.jsonl
-    tail -n ${limit} ~/.please/shell_history.jsonl > ~/.please/shell_history.jsonl.tmp && mv ~/.please/shell_history.jsonl.tmp ~/.please/shell_history.jsonl
+    echo "{\\"cmd\\":\\"$escaped_cmd\\",\\"exit\\":$exit_code,\\"time\\":\\"$timestamp\\"}" >> ~/.ai-cli/shell_history.jsonl
+    tail -n ${limit} ~/.ai-cli/shell_history.jsonl > ~/.ai-cli/shell_history.jsonl.tmp && mv ~/.ai-cli/shell_history.jsonl.tmp ~/.ai-cli/shell_history.jsonl
   fi
 }
 
@@ -965,8 +965,8 @@ export async function installRemoteShellHook(
       return { success: false, message: chalk.hex(colors.error)(`安装失败: ${result.stdout}`) }
     }
 
-    // 确保 ~/.please 目录存在
-    await sshExecFn('mkdir -p ~/.please')
+    // 确保 ~/.ai-cli 目录存在
+    await sshExecFn('mkdir -p ~/.ai-cli')
 
     return {
       success: true,

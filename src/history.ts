@@ -3,7 +3,7 @@ import path from 'path'
 import os from 'os'
 import { getConfig } from './config.js'
 
-const CONFIG_DIR = path.join(os.homedir(), '.please')
+const CONFIG_DIR = path.join(os.homedir(), '.ai-cli')
 const HISTORY_FILE = path.join(CONFIG_DIR, 'history.json')
 const MAX_HISTORY = 10
 const MAX_OUTPUT_LENGTH = 500
@@ -133,7 +133,7 @@ export function formatHistoryForAI(): string {
     })
     .reverse() // 从旧到新排列
 
-  return `【最近通过 pls 执行的命令】\n${lines.join('\n')}`
+  return `【最近通过 ai 执行的命令】\n${lines.join('\n')}`
 }
 
 /**

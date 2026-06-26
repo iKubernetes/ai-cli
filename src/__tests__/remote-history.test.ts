@@ -29,7 +29,7 @@ vi.mock('../config.js', () => ({
     commandHistoryLimit: 10,
     shellHistoryLimit: 15,
   })),
-  CONFIG_DIR: '/home/testuser/.please',
+  CONFIG_DIR: '/home/testuser/.ai-cli',
 }))
 
 // Mock remote 模块
@@ -670,7 +670,7 @@ describe('clearRemoteShellHistory', () => {
     // 验证执行了远程删除命令
     expect(mockSshExec).toHaveBeenCalledWith(
       'server1',
-      'rm -f ~/.please/shell_history.jsonl',
+      'rm -f ~/.ai-cli/shell_history.jsonl',
       expect.anything()
     )
     // 验证删除了本地缓存

@@ -163,8 +163,8 @@ describe('生成 Zsh Hook 脚本', () => {
   it('应该包含 Hook 开始和结束标记', () => {
     // 这需要访问 Hook 脚本生成逻辑
     // 假设我们导出了 generateZshHook 函数
-    expect(ZSH_HOOK_START_MARKER).toBe('# >>> pretty-please shell hook >>>')
-    expect(ZSH_HOOK_END_MARKER).toBe('# <<< pretty-please shell hook <<<')
+    expect(ZSH_HOOK_START_MARKER).toBe('# >>> ai-cli shell hook >>>')
+    expect(ZSH_HOOK_END_MARKER).toBe('# <<< ai-cli shell hook <<<')
   })
 
   it('Zsh Hook 应该包含 preexec 函数', () => {
@@ -192,9 +192,9 @@ describe('生成 Zsh Hook 脚本', () => {
     expect(hookContent).toContain('echo "$json"')
   })
 
-  it('Zsh Hook 应该使用 ~/.please 目录', () => {
+  it('Zsh Hook 应该使用 ~/.ai-cli 目录', () => {
     const hookContent = zshrcWithHook
-    expect(hookContent).toContain('.please')
+    expect(hookContent).toContain('.ai-cli')
   })
 
   it('Zsh Hook 应该包含必要的变量声明', () => {
@@ -411,15 +411,15 @@ describe('generateRemoteHookScript', () => {
     const { generateRemoteHookScript } = await import('../shell-hook.js')
     const script = generateRemoteHookScript('zsh')
 
-    expect(script).toContain('>>> pretty-please shell hook >>>')
-    expect(script).toContain('<<< pretty-please shell hook <<<')
+    expect(script).toContain('>>> ai-cli shell hook >>>')
+    expect(script).toContain('<<< ai-cli shell hook <<<')
   })
 
-  it('远程脚本应该使用 ~/.please 目录', async () => {
+  it('远程脚本应该使用 ~/.ai-cli 目录', async () => {
     const { generateRemoteHookScript } = await import('../shell-hook.js')
     const script = generateRemoteHookScript('zsh')
 
-    expect(script).toContain('~/.please')
+    expect(script).toContain('~/.ai-cli')
     expect(script).toContain('shell_history.jsonl')
   })
 
@@ -529,7 +529,7 @@ describe.skip('getLastNonPlsCommand', () => {
     if (result !== null) {
       expect(result).toHaveProperty('cmd')
       // 不应该是 pls 命令
-      expect(result.cmd.startsWith('pls')).toBe(false)
+      expect(result.cmd.startsWith('ai')).toBe(false)
       expect(result.cmd.startsWith('please')).toBe(false)
     }
   })

@@ -416,7 +416,7 @@ export function createTempDir(): string {
   const fs = require('fs')
   const path = require('path')
 
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'pls-test-'))
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ai-test-'))
   return tempDir
 }
 

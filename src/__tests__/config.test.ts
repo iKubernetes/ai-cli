@@ -228,7 +228,7 @@ describe('saveConfig', () => {
     saveConfig(config)
 
     expect(mockFs.mkdirSync).toHaveBeenCalledWith(
-      expect.stringContaining('.please'),
+      expect.stringContaining('.ai-cli'),
       { recursive: true }
     )
   })
@@ -454,14 +454,14 @@ describe('isConfigValid', () => {
 // ============================================================================
 
 describe('CONFIG_DIR', () => {
-  it('应该指向用户 home 目录下的 .please', async () => {
+  it('应该指向用户 home 目录下的 .ai-cli', async () => {
     mockOs.homedir.mockReturnValue('/home/testuser')
 
     const { CONFIG_DIR } = await resetConfigModule()
 
     // 使用跨平台兼容的断言
     expect(CONFIG_DIR).toContain('testuser')
-    expect(CONFIG_DIR).toContain('.please')
+    expect(CONFIG_DIR).toContain('.ai-cli')
   })
 
   it('Windows 路径应该正确', async () => {
@@ -469,7 +469,7 @@ describe('CONFIG_DIR', () => {
 
     const { CONFIG_DIR } = await resetConfigModule()
 
-    expect(CONFIG_DIR).toContain('.please')
+    expect(CONFIG_DIR).toContain('.ai-cli')
   })
 })
 
@@ -720,7 +720,7 @@ describe('displayConfig', () => {
 
     const allCalls = consoleLogSpy.mock.calls.map(call => call[0]).join('\n')
     expect(allCalls).toContain('配置文件')
-    expect(allCalls).toContain('.please')
+    expect(allCalls).toContain('.ai-cli')
   })
 
   it('配置文件不存在时应该显示默认配置', async () => {

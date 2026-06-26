@@ -36,7 +36,7 @@ vi.mock('../config.js', () => ({
     defaultRemote: undefined,
   })),
   saveConfig: vi.fn(),
-  CONFIG_DIR: '/home/testuser/.please',
+  CONFIG_DIR: '/home/testuser/.ai-cli',
 }))
 
 // Mock theme 模块
