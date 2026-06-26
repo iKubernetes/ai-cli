@@ -12,7 +12,7 @@ import chalk from 'chalk'
 // import { render } from 'ink'
 // import { MultiStepCommandGenerator } from '../src/components/MultiStepCommandGenerator.js'
 // import { Chat } from '../src/components/Chat.js'
-import { isConfigValid, setConfigValue, getConfig, maskApiKey, displayConfig } from '../src/config.js'
+import { isConfigValid, setConfigValue, getConfig, maskApiKey, displayConfig, isExperimentalEnabled, setExperimental } from '../src/config.js'
 import { clearHistory, addHistory, getHistory, getHistoryFilePath } from '../src/history.js'
 import { clearChatHistory, getChatRoundCount, getChatHistoryFilePath, displayChatHistory } from '../src/chat-history.js'
 import { type ExecutedStep } from '../src/multi-step.js'
@@ -203,18 +203,23 @@ function executeWithInherit(command: string): Promise<{ exitCode: number; output
   })
 }
 
+// ================== 执行管道集成 ==================
+// executeCommandLegacy 是原有的执行函数，保留作为回退
+// executeWithPipeline 是适配器，通过 Feature Flag 控制是否启用管道
+
 /**
- * 执行命令（原生版本）
+ * 原有执行函数（保留作为回退）
+ * 当 experimental.executionPipeline 开关关闭时使用
  */
-function executeCommand(command: string): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
+function executeCommandLegacy(
+  command: string
+): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
   // 检测是否是需要 TTY 的工具
   const firstCmd = command.trim().split(/[\s|&;]/)[0]
   if (TTY_REQUIRED_COMMANDS.has(firstCmd)) {
-    // 使用 inherit 模式执行（无法捕获输出，但能正常运行）
     return executeWithInherit(command)
   }
 
-  // 普通命令：使用 pipe 模式（捕获输出）
   return new Promise((resolve) => {
     let stdout = ''
     let stderr = ''
@@ -222,7 +227,6 @@ function executeCommand(command: string): Promise<{ exitCode: number; output: st
 
     console.log('') // 空行
 
-    // 计算命令框宽度，让分隔线长度一致（限制终端宽度）
     const termWidth = process.stdout.columns || 80
     const maxContentWidth = termWidth - 6
     const lines = command.split('\n')
@@ -237,9 +241,7 @@ function executeCommand(command: string): Promise<{ exitCode: number; output: st
     const boxWidth = Math.max(console2.MIN_COMMAND_BOX_WIDTH, Math.min(actualMaxWidth + 4, termWidth - 2))
     console2.printSeparator('输出', boxWidth)
 
-    // 使用 platform 模块构建跨平台命令执行配置
     const execConfig = buildShellExecConfig(command)
-
     const child = exec(execConfig.command, { shell: execConfig.shell })
 
     child.stdout?.on('data', (data) => {
@@ -272,6 +274,161 @@ function executeCommand(command: string): Promise<{ exitCode: number; output: st
   })
 }
 
+/**
+ * 通过 Feature Flag 控制是否使用执行管道
+ * 当 experimental.executionPipeline = true 时使用管道，否则回退到原有执行逻辑
+ */
+async function executeWithPipeline(
+  command: string,
+  options: { cwd?: string; env?: NodeJS.ProcessEnv; shell?: string | boolean; timeout?: number; dryRun?: boolean } = {},
+  sessionId: string
+): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
+  // Feature Flag 关闭时回退到原有逻辑
+  if (!isExperimentalEnabled('executionPipeline')) {
+    return executeCommandLegacy(command)
+  }
+
+  const { ExecutionPipeline } = await import('../src/execution/pipeline.js')
+
+  // 检测是否是需要 TTY 的工具（TTY 工具仍走原有 inherit 模式）
+  const firstCmd = command.trim().split(/[\s|&;]/)[0]
+  if (TTY_REQUIRED_COMMANDS.has(firstCmd)) {
+    return executeWithInherit(command)
+  }
+
+  const pipeline = new ExecutionPipeline({
+    enableDryRun: false,
+  })
+
+  const ctx = {
+    command,
+    cwd: options.cwd || process.cwd(),
+    env: options.env || (process.env as NodeJS.ProcessEnv),
+    shell: options.shell !== undefined ? options.shell : true,
+    timeout: options.timeout || (process.env.AI_EXEC_TIMEOUT ? parseInt(process.env.AI_EXEC_TIMEOUT, 10) : undefined),
+    sessionId,
+    isDryRun: options.dryRun || false,
+  }
+
+  // 打印输出框（保持与原有行为一致的 UI）
+  console.log('')
+  const termWidth = process.stdout.columns || 80
+  const boxWidth = Math.min(termWidth - 2, 84)
+  console2.printSeparator('输出', boxWidth)
+
+  const result = await pipeline.execute(ctx)
+
+  if (result.stdout || result.stderr) {
+    console2.printSeparator('', boxWidth)
+  }
+
+  return {
+    exitCode: result.exitCode ?? 1,
+    output: result.stdout + result.stderr,
+    stdout: result.stdout,
+    stderr: result.stderr,
+  }
+}
+
+/**
+ * 计数器用于生成 sessionId
+ */
+let sessionCounter = 0
+
+function nextSessionId(): string {
+  sessionCounter++
+  return `exec-${Date.now()}-${sessionCounter}`
+}
+
+/**
+ * 执行命令（适配器：自动选择回退或管道）
+ * 保持原有签名完全不变
+ */
+function executeCommand(command: string): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
+  return executeWithPipeline(command, {}, nextSessionId())
+}
+
+/**
+ * 执行命令（适配器：支持额外选项和 sessionId）
+ */
+async function executeCommandWithSession(
+  command: string,
+  options: { cwd?: string; env?: NodeJS.ProcessEnv; shell?: string | boolean; timeout?: number; dryRun?: boolean } = {},
+  sessionId?: string
+): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
+  return executeWithPipeline(command, options, sessionId || nextSessionId())
+}
+
+// ================== 原有执行命令（完整保留作为参考）==================
+/**
+ * 执行命令（原生版本）
+ * 保留用于向后引用，实际已被 executeCommandLegacy 替代
+ */
+/*
+function executeCommandOriginal(command: string): Promise<{ exitCode: number; output: string; stdout: string; stderr: string }> {
+  // 检测是否是需要 TTY 的工具
+  const firstCmd = command.trim().split(/[\s|&;]/)[0]
+  if (TTY_REQUIRED_COMMANDS.has(firstCmd)) {
+    // 使用 inherit 模式执行（无法捕获输出，但能正常运行）
+    return executeWithInherit(command)
+  }
+
+  // 普通命令：使用 pipe 模式（捕获输出）
+  return new Promise((resolve) => {
+    let stdout = ''
+    let stderr = ''
+    let hasOutput = false
+
+    console.log('')
+
+    const termWidth = process.stdout.columns || 80
+    const maxContentWidth = termWidth - 6
+    const lines = command.split('\n')
+    const wrappedLines: string[] = []
+    for (const line of lines) {
+      wrappedLines.push(...console2.wrapText(line, maxContentWidth))
+    }
+    const actualMaxWidth = Math.max(
+      ...wrappedLines.map((l) => console2.getDisplayWidth(l)),
+      console2.getDisplayWidth('生成命令')
+    )
+    const boxWidth = Math.max(console2.MIN_COMMAND_BOX_WIDTH, Math.min(actualMaxWidth + 4, termWidth - 2))
+    console2.printSeparator('输出', boxWidth)
+
+    const execConfig = buildShellExecConfig(command)
+    const child = exec(execConfig.command, { shell: execConfig.shell })
+
+    child.stdout?.on('data', (data) => {
+      stdout += data
+      hasOutput = true
+      process.stdout.write(data)
+    })
+
+    child.stderr?.on('data', (data) => {
+      stderr += data
+      hasOutput = true
+      process.stderr.write(data)
+    })
+
+    child.on('close', (code) => {
+      if (hasOutput) {
+        console2.printSeparator('', boxWidth)
+      }
+      resolve({ exitCode: code || 0, output: stdout + stderr, stdout, stderr })
+    })
+
+    child.on('error', (err) => {
+      if (!hasOutput) {
+        console2.printSeparator('', boxWidth)
+      }
+      console2.error(err.message)
+      console2.printSeparator('', boxWidth)
+      resolve({ exitCode: 1, output: err.message, stdout: '', stderr: err.message })
+    })
+  })
+}
+*/
+
 // 设置程序
 program
   .name('ai')
@@ -293,9 +450,20 @@ configCmd
 
 configCmd
   .command('set <key> <value>')
-  .description('设置配置项 (apiKey, baseUrl, provider, model, shellHook, chatHistoryLimit)')
+  .description('设置配置项 (apiKey, baseUrl, provider, model, shellHook, chatHistoryLimit, experimental.<key>)')
   .action(async (key, value) => {
     try {
+      // 处理 experimental.<key> 格式
+      if (key.startsWith('experimental.')) {
+        const flagKey = key.slice('experimental.'.length)
+        const boolValue = value === 'true' || value === '1'
+        await setExperimental(flagKey, boolValue)
+        console.log('')
+        console2.success(`已设置 experimental.${flagKey} = ${boolValue}`)
+        console.log('')
+        return
+      }
+
       const oldConfig = getConfig()
       const oldShellHistoryLimit = oldConfig.shellHistoryLimit
 
@@ -310,6 +478,41 @@ configCmd
       }
 
       console.log('')
+    } catch (error: any) {
+      console.log('')
+      console2.error(error.message)
+      console.log('')
+      process.exit(1)
+    }
+  })
+
+configCmd
+  .command('get <key>')
+  .description('获取配置项 (支持 experimental.<key>)')
+  .action((key) => {
+    try {
+      // 处理 experimental.<key> 格式
+      if (key.startsWith('experimental.')) {
+        const flagKey = key.slice('experimental.'.length)
+        const enabled = isExperimentalEnabled(flagKey)
+        console.log('')
+        console.log(`  ${key}: ${enabled}`)
+        console.log('')
+        return
+      }
+
+      // 普通配置项
+      const config = getConfig()
+      if (key in config) {
+        console.log('')
+        console.log(`  ${key}: ${(config as any)[key]}`)
+        console.log('')
+      } else {
+        console.log('')
+        console2.error(`未知的配置项: ${key}`)
+        console.log('')
+        process.exit(1)
+      }
     } catch (error: any) {
       console.log('')
       console2.error(error.message)
@@ -1716,7 +1919,7 @@ program
             output = result.output
             stdout = result.stdout
           } else {
-            // 本地执行
+            // 本地执行 — 使用 executeCommand（由 Feature Flag 控制是否走管道）
             const result = await executeCommand(stepResult.command)
             exitCode = result.exitCode
             output = result.output
@@ -1725,9 +1928,6 @@ program
           const execDuration = Date.now() - execStart
 
           // 判断命令是否成功
-          // 退出码 141 = 128 + 13 (SIGPIPE)，是管道正常关闭时的信号
-          // 例如：ps aux | head -3，head 读完 3 行就关闭管道，ps 收到 SIGPIPE
-          // 但如果退出码是 141 且没有 stdout 输出，说明可能是真正的错误
           const isSigpipeWithOutput = exitCode === 141 && stdout.trim().length > 0
           const isSuccess = exitCode === 0 || isSigpipeWithOutput
 
